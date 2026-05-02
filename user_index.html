@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feed - SkillSwap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      
+      body {
+        background-color: #f8fafc;
+        color: #334155;
+        line-height: 1.5;
+      }
+      
+      .header {
+        background-color: white;
+        border-bottom: 1px solid #e2e8f0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      
+      .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 975px;
+        margin: 0 auto;
+        padding: 12px 16px;
+      }
+      
+      .logo {
+        font-size: 24px;
+        font-weight: 700;
+        color: #3b82f6;
+        text-decoration: none;
+      }
+      
+      .search-bar {
+        background-color: #f1f5f9;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        width: 270px;
+        font-size: 14px;
+      }
+      
+      .search-bar:focus {
+        outline: none;
+        background-color: #e2e8f0;
+      }
+      
+      .nav-icons {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      
+      .nav-icon {
+        position: relative;
+        font-size: 20px;
+        text-decoration: none;
+        color: #64748b;
+        transition: color 0.2s;
+      }
+      
+      .nav-icon:hover {
+        color: #3b82f6;
+      }
+      
+      .notification-dot {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 8px;
+        height: 8px;
+        background-color: #ef4444;
+        border-radius: 50%;
+      }
+      
+      .user-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background-color: #3b82f6;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      
+      .user-avatar:hover {
+        transform: scale(1.05);
+      }
+      
+      .profile-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 16px;
+        width: 280px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        z-index: 101;
+        display: none;
+        overflow: hidden;
+      }
+      
+      .profile-dropdown.active {
+        display: block;
+      }
+      
+      .profile-dropdown-header {
+        padding: 16px;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      
+      .profile-dropdown-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-color: #3b82f6;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 18px;
+      }
+      
+      .profile-dropdown-info h4 {
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+      
+      .profile-dropdown-info p {
+        font-size: 14px;
+        color: #64748b;
+      }
+      
+      .profile-dropdown-menu {
+        padding: 8px 0;
+      }
+      
+      .profile-dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        text-decoration: none;
+        color: #334155;
+        transition: background-color 0.2s;
+      }
+      
+      .profile-dropdown-item:hover {
+        background-color: #f8fafc;
+      }
+      
+      .profile-dropdown-item.logout {
+        color: #ef4444;
+      }
+      
+      .profile-dropdown-divider {
+        height: 1px;
+        background-color: #f1f5f9;
+        margin: 8px 0;
+      }
+      
+      .main-container {
+        display: flex;
+        max-width: 975px;
+        margin: 30px auto;
+        gap: 30px;
+      }
+      
+      .feed {
+        flex: 1;
+        max-width: 614px;
+      }
+      
+      .sidebar {
+        width: 320px;
+      }
+      
+      .stories {
+        background-color: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+        overflow-x: auto;
+        display: flex;
+        gap: 16px;
+      }
+      
+      .story {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+      }
+      
+      .story-avatar {
+        width: 66px;
+        height: 66px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        padding: 3px;
+        margin-bottom: 6px;
+      }
+      
+      .story-avatar-inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      
+      .story-avatar-inner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .story-username {
+        font-size: 12px;
+        max-width: 66px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      
+      .post {
+        background-color: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        animation: fadeIn 0.5s ease;
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .post-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+      }
+      
+      .post-user {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      
+      .post-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: #3b82f6;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+      }
+      
+      .post-username {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      
+      .post-skill {
+        font-size: 12px;
+        color: #64748b;
+      }
+      
+      .post-options {
+        color: #64748b;
+        cursor: pointer;
+      }
+      
+      .post-image {
+        width: 100%;
+        height: auto;
+        background-color: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+        color: #64748b;
+        font-size: 18px;
+      }
+      
+      .trending-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background-color: #f59e0b;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      
+      .post-actions {
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 24px;
+      }
+      
+      .post-actions-left {
+        display: flex;
+        gap: 16px;
+      }
+      
+      .post-action {
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      
+      .post-action:hover {
+        transform: scale(1.1);
+      }
+      
+      .liked {
+        color: #ef4444;
+      }
+      
+      .bookmarked {
+        color: #3b82f6;
+      }
+      
+      .post-likes {
+        padding: 0 16px;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+      
+      .post-caption {
+        padding: 0 16px;
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+      
+      .post-caption-username {
+        font-weight: 600;
+        margin-right: 4px;
+      }
+      
+      .post-tags {
+        color: #3b82f6;
+      }
+      
+      .post-comments {
+        padding: 0 16px;
+        color: #64748b;
+        font-size: 14px;
+        margin-bottom: 12px;
+        cursor: pointer;
+      }
+      
+      .post-time {
+        padding: 0 16px 12px;
+        color: #64748b;
+        font-size: 10px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      
+      .add-comment {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        border-top: 1px solid #f1f5f9;
+      }
+      
+      .comment-input {
+        flex: 1;
+        border: none;
+        padding: 8px 0;
+        font-size: 14px;
+      }
+      
+      .comment-input:focus {
+        outline: none;
+      }
+      
+      .post-comment {
+        color: #3b82f6;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        opacity: 0.7;
+      }
+      
+      .post-comment.active {
+        opacity: 1;
+      }
+      
+      .sidebar-section {
+        background-color: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+      
+      .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      
+      .sidebar-title {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      
+      .see-all {
+        font-size: 12px;
+        font-weight: 600;
+        color: #334155;
+        text-decoration: none;
+      }
+      
+      .trending-item,
+      .suggestion-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+      }
+      
+      .trending-item:not(:last-child),
+      .suggestion-item:not(:last-child) {
+        border-bottom: 1px solid #f1f5f9;
+      }
+      
+      .trending-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background-color: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+      }
+      
+      .trending-info {
+        flex: 1;
+      }
+      
+      .trending-name {
+        font-weight: 500;
+        margin-bottom: 2px;
+      }
+      
+      .trending-stats {
+        font-size: 14px;
+        color: #64748b;
+      }
+      
+      .suggestion-user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      
+      .suggestion-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: #3b82f6;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      
+      .suggestion-details {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .suggestion-username {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      
+      .suggestion-skill {
+        font-size: 12px;
+        color: #64748b;
+      }
+      
+      .follow-btn {
+        color: #3b82f6;
+        font-weight: 600;
+        font-size: 12px;
+        cursor: pointer;
+        background: none;
+        border: none;
+      }
+      
+      .follow-btn.following {
+        color: #64748b;
+      }
+      
+      .copyright {
+        font-size: 12px;
+        color: #94a3b8;
+        margin-top: 24px;
+      }
+      
+      .comment-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .comment-modal-content {
+        background-color: white;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 80vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .comment-modal-header {
+        padding: 16px;
+        border-bottom: 1px solid #e2e8f0;
+        text-align: center;
+        font-weight: 600;
+        position: relative;
+      }
+      
+      .close-modal {
+        position: absolute;
+        right: 16px;
+        cursor: pointer;
+      }
+      
+      .comment-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+      }
+      
+      .comment-item {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      
+      .comment-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: #3b82f6;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+      
+      .comment-content {
+        flex: 1;
+      }
+      
+      .comment-username {
+        font-weight: 600;
+        font-size: 14px;
+        margin-right: 6px;
+      }
+      
+      .comment-text {
+        font-size: 14px;
+      }
+      
+      .comment-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 4px;
+        font-size: 12px;
+        color: #64748b;
+      }
+      
+      .comment-action {
+        cursor: pointer;
+      }
+      
+      .comment-input-container {
+        padding: 16px;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        gap: 12px;
+      }
+      
+      .modal-comment-input {
+        flex: 1;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+      
+      .modal-comment-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+      }
+      
+      .post-btn {
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      
+      .loading {
+        text-align: center;
+        padding: 24px;
+        color: #64748b;
+      }
+      
+      .spinner {
+        width: 24px;
+        height: 24px;
+        border: 2px solid #e2e8f0;
+        border-top: 2px solid #3b82f6;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 12px;
+      }
+      
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .sidebar {
+          display: none;
+        }
+      
+        .main-container {
+          justify-content: center;
+        }
+      
+        .search-bar {
+          display: none;
+        }
+      }
+       /* Post Creation Modal */
+.modal-overlay {
+  display: none;                /* Hidden by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-overlay.active {
+  display: flex;                /* Show only when active */
+}
+
+        .create-post-modal {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #64748b;
+            padding: 4px;
+        }
+
+        .close-modal:hover {
+            color: #334155;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #374151;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .image-upload-container {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .image-upload-container:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+
+        .image-upload-container.dragover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+
+        .upload-icon {
+            font-size: 40px;
+            color: #9ca3af;
+            margin-bottom: 12px;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .image-preview {
+            margin-top: 16px;
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .remove-image {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .remove-image:hover {
+            background: #dc2626;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .skill-tag {
+            background-color: #eff6ff;
+            color: #1e40af;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .remove-skill {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .remove-skill:hover {
+            color: #ef4444;
+        }
+
+        .skill-select-container {
+            position: relative;
+        }
+
+        .skill-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+        }
+
+        .skill-suggestion {
+            padding: 10px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .skill-suggestion:hover {
+            background-color: #f9fafb;
+        }
+
+        .skill-suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .cancel-btn {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .cancel-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        .submit-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #2563eb;
+        }
+
+        .submit-btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .character-count {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .character-count.warning {
+            color: #f59e0b;
+        }
+
+        .character-count.error {
+            color: #ef4444;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            border-radius: 12px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 640px) {
+            .create-post-modal {
+                width: 95%;
+                max-height: 95vh;
+            }
+            
+            .modal-body {
+                padding: 16px;
+            }
+        }
+        /* Background overlay */
+.modal {
+  display: none; 
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
+  justify-content: center;
+  align-items: center;
+    max-height: 90vh;       /* Limit modal height to 90% of screen */
+  overflow-y: auto;       /* Enable vertical scrolling */
+}
+
+/* Optional: improve scrollbar look */
+.modal::-webkit-scrollbar {
+  width: 8px;
+}
+.modal::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+/* overlay should allow content to be placed at top if taller than screen */
+.modal, .modal-overlay {
+  display: none;               /* kept hidden by default */
+  position: fixed;
+  inset: 0;                    /* top:0;right:0;bottom:0;left:0; */
+  z-index: 1000;
+  background: rgba(0,0,0,0.45);
+  /* use flex-start so tall content will start at top and be scrollable */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;     /* IMPORTANT: allow modal to start near top */
+  padding: 24px;               /* spacing from edges on small screens */
+  overflow-y: auto;            /* allow overlay to scroll if needed */
+}
+
+/* modal box */
+.create-post-modal, .modal-content {
+  background: #fff;
+  width: 700px;
+  max-width: 96%;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  /* IMPORTANT: limit height and enable internal scrolling */
+  max-height: calc(100vh - 48px); /* viewport minus overlay padding */
+  overflow-y: auto;                /* scroll inside modal */
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+/* visual niceties for scrollbars (optional) */
+.create-post-modal::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+.create-post-modal::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.15);
+  border-radius: 6px;
+}
+
+
+/* Modal box */
+.modal-content {
+  background: #fff;
+  width: 600px;
+  max-width: 90%;
+  padding: 25px 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Form styling */
+.modal-content h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus {
+  border-color: #007bff;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.create-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.create-btn:hover {
+  background-color: #0056b3;
+}
+
+.cancel-btn:hover {
+  background-color: #aaa;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header">
+      <div class="header-container">
+        <a href="{% url 'user_index' %}" class="logo">SkillSwap</a>
+
+        <input type="text" class="search-bar" placeholder="Search" />
+
+        <div class="nav-icons">
+          <a href="{% url 'user_index' %}" class="nav-icon"><i class="fas fa-home"></i></a>
+            <button class="create-post-btn" id="createPostBtn">
+                    <i class="far fa-plus-square"></i>
+                </button>
+          <a href="#" class="nav-icon"><i class="far fa-compass"></i></a>
+          <a href="#" class="nav-icon">
+            <i class="far fa-heart"></i>
+            <span class="notification-dot"></span>
+          </a>
+          <div class="user-avatar" id="userAvatarBtn">{{ user_initials|slice:":1" }}</div>
+        </div>
+      </div>
+
+      <!-- Profile Dropdown -->
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="profile-dropdown-header">
+          <div class="profile-dropdown-avatar">{{ user_initials|slice:":1" }}</div>
+          <div class="profile-dropdown-info">
+            <h4>{{ user.name }}</h4>
+            <p>{{ user.email }}</p>
+            <p>{{ user.phone_no}}</p>
+          </div>
+        </div>
+        <div class="profile-dropdown-menu">
+          <a href="{% url 'user_profile' %}" class="profile-dropdown-item">
+            <span>👤</span>
+            <span>My Profile</span>
+          </a>
+          <a href="{% url 'my_learning' %}" class="profile-dropdown-item">
+            <span>📚</span>
+            <span>My Learning</span>
+          </a>
+          <a href="{% url 'my_skills' %}" class="profile-dropdown-item">
+            <span>⚡</span>
+            <span>My Skills</span>
+          </a>
+          <a href="{% url 'saved_posts' %}" class="profile-dropdown-item">
+            <span>🔖</span>
+            <span>Saved Posts</span>
+          </a>
+          <div class="profile-dropdown-divider"></div>
+          <a href="{% url 'settings' %}" class="profile-dropdown-item">
+            <span>⚙️</span>
+            <span>Settings</span>
+          </a>
+          <a href="{% url 'help' %}" class="profile-dropdown-item">
+            <span>❓</span>
+            <span>Help & Support</span>
+          </a>
+          <div class="profile-dropdown-divider"></div>
+          <a href="{% url 'logout' %}" class="profile-dropdown-item logout">
+            <span>🚪</span>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+      <!-- Feed -->
+      <div class="feed">
+        <!-- Stories -->
+        <div class="stories">
+          <!-- Your own story -->
+          <div class="story">
+            <div class="story-avatar">
+              <div class="story-avatar-inner">
+                <div class="user-avatar" style="width: 100%; height: 100%; background-color: #ccc;">{{ user_initials|default:'A' }}</div>
+              </div>
+            </div>
+            <div class="story-username">Your Story</div>
+          </div>
+
+          <!-- Other users' stories -->
+          {% for story in stories %}
+            <div class="story">
+              <div class="story-avatar">
+                <div class="story-avatar-inner">
+                  <div class="user-avatar" style="width: 100%; height: 100%; background-color: {{ story.color|default:'#888' }};">{{ story.initials|default:'U' }}</div>
+                </div>
+              </div>
+              <div class="story-username">{{ story.username|default:'Unknown' }}</div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- 🔹 Floating "+" Button -->
+     <button class="create-post-btn" id="createPostBtn">
+     <i class="far fa-plus-square"></i>
+     </button>
+
+        <!-- Posts -->
+        {% for post in posts %}
+          <div class="post">
+            <div class="post-header">
+              <div class="post-user">
+                <div class="post-avatar" style="background-color: {{ post.user.color }};">{{ post.user.initials }}</div>
+                <div>
+                  <div class="post-username">{{ post.user.name }}</div>
+                  <div class="post-skill">{{ post.user.skills_offered|default:'SkillSwap User' }}</div>
+                </div>
+              </div>
+              <div class="post-options">
+                <i class="fas fa-ellipsis-h"></i>
+              </div>
+            </div>
+            <div class="post-image">
+              {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width:100%; height:auto;" />
+              {% else %}
+                <i class="fas fa-{{ post.icon }}"></i> {{ post.title }}
+              {% endif %}
+              {% if post.trending %}
+                <div class="trending-badge">🔥 Trending</div>
+              {% endif %}
+            </div>
+            <div class="post-actions">
+              <div class="post-actions-left">
+                <div class="post-action like-btn" data-post-id="{{ post.id }}">
+                  <i class="far fa-heart"></i>
+                </div>
+                <div class="post-action comment-btn" data-post-id="{{ post.id }}">
+                  <i class="far fa-comment"></i>
+                </div>
+                <div class="post-action">
+                  <i class="far fa-paper-plane"></i>
+                </div>
+              </div>
+              <div class="post-action bookmark-btn" data-post-id="{{ post.id }}">
+                <i class="far fa-bookmark"></i>
+              </div>
+            </div>
+            <div class="post-likes">{{ post.likes }} likes</div>
+            <div class="post-caption">
+              <span class="post-caption-username">{{ post.user.name }}</span>
+              {{ post.content }}
+              <span class="post-tags">{{ post.tags }}</span>
+            </div>
+            <div class="post-comments view-comments" data-post-id="{{ post.id }}">View all {{ post.comments }} comments</div>
+            <div class="post-time">{{ post.created_at|timesince }} ago</div>
+            <div class="add-comment">
+              <input type="text" class="comment-input" placeholder="Add a comment..." />
+              <div class="post-comment">Post</div>
+            </div>
+          </div>
+        {% empty %}
+          <div class="post">
+            <div class="post-header">
+              <div class="post-user">
+                <div class="post-avatar" style="background-color: #10b981;">S</div>
+                <div>
+                  <div class="post-username">sarah_design</div>
+                  <div class="post-skill">UI/UX Designer</div>
+                </div>
+              </div>
+            </div>
+            <div class="post-image">
+              <i class="fas fa-palette"></i> Welcome to SkillSwap!
+            </div>
+            <div class="post-actions">
+              <div class="post-actions-left">
+                <div class="post-action like-btn">
+                  <i class="far fa-heart"></i>
+                </div>
+                <div class="post-action comment-btn">
+                  <i class="far fa-comment"></i>
+                </div>
+                <div class="post-action">
+                  <i class="far fa-paper-plane"></i>
+                </div>
+              </div>
+              <div class="post-action bookmark-btn">
+                <i class="far fa-bookmark"></i>
+              </div>
+            </div>
+            <div class="post-likes">0 likes</div>
+            <div class="post-caption">
+              <span class="post-caption-username">sarah_design</span>
+              Welcome to SkillSwap! This is where you'll see posts from people you follow. Start following users to see their content here!
+            </div>
+            <div class="post-comments view-comments">View all 0 comments</div>
+            <div class="post-time">just now</div>
+            <div class="add-comment">
+              <input type="text" class="comment-input" placeholder="Add a comment..." />
+              <div class="post-comment">Post</div>
+            </div>
+          </div>
+        {% endfor %}
+
+        <div class="loading" id="loadingIndicator" style="display: none;">
+          <div class="spinner"></div>
+          <p>Loading more posts...</p>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Trending Skills -->
+        <div class="sidebar-section">
+          <div class="sidebar-header">
+            <div class="sidebar-title">🔥 Trending Skills</div>
+            <a href="#" class="see-all">See all</a>
+          </div>
+          <div>
+            {% for skill in trending_skills %}
+              <div class="trending-item">
+                <div class="trending-icon">{{ skill.icon|default:'⚡' }}</div>
+                <div class="trending-info">
+                  <div class="trending-name">{{ skill.name }}</div>
+                  <div class="trending-stats">{{ skill.learners }} learning</div>
+                </div>
+              </div>
+            {% empty %}
+              <div class="trending-item">
+                <div class="trending-icon">🎨</div>
+                <div class="trending-info">
+                  <div class="trending-name">UI/UX Design</div>
+                  <div class="trending-stats">1.2k learning</div>
+                </div>
+              </div>
+              <div class="trending-item">
+                <div class="trending-icon">📊</div>
+                <div class="trending-info">
+                  <div class="trending-name">Data Analysis</div>
+                  <div class="trending-stats">980 learning</div>
+                </div>
+              </div>
+              <div class="trending-item">
+                <div class="trending-icon">🌐</div>
+                <div class="trending-info">
+                  <div class="trending-name">Web Development</div>
+                  <div class="trending-stats">1.5k learning</div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Suggested for You -->
+        <div class="sidebar-section">
+          <div class="sidebar-header">
+            <div class="sidebar-title">Suggested for You</div>
+            <a href="#" class="see-all">See all</a>
+          </div>
+          <div>
+            {% if suggested_list %}
+              {% for item in suggested_list %}
+                <div class="suggestion-item">
+                  <div class="suggestion-user-info">
+                    <div class="suggestion-avatar" style="background-color: {{ item.user.color }};">{{ item.user.initials }}</div>
+                    <div class="suggestion-details">
+                      <div class="suggestion-username">{{ item.user.name }}</div>
+                      <div class="suggestion-skill">{{ item.user.skill|default:'SkillSwap User' }}</div>
+                    </div>
+                  </div>
+                  {% if item.is_following %}
+                    <button class="follow-btn following" data-user-id="{{ item.user.id }}">Following</button>
+                  {% else %}
+                    <button class="follow-btn" data-user-id="{{ item.user.id }}">Follow</button>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% else %}
+              <div class="suggestion-item">
+                <div class="suggestion-user-info">
+                  <div class="suggestion-avatar" style="background-color: #f59e0b;">M</div>
+                  <div class="suggestion-details">
+                    <div class="suggestion-username">mike_dev</div>
+                    <div class="suggestion-skill">Full Stack Developer</div>
+                  </div>
+                </div>
+                <button class="follow-btn">Follow</button>
+              </div>
+              <div class="suggestion-item">
+                <div class="suggestion-user-info">
+                  <div class="suggestion-avatar" style="background-color: #8b5cf6;">J</div>
+                  <div class="suggestion-details">
+                    <div class="suggestion-username">jess_ui</div>
+                    <div class="suggestion-skill">UI/UX Designer</div>
+                  </div>
+                </div>
+                <button class="follow-btn">Follow</button>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Your Learning -->
+        <div class="sidebar-section">
+          <div class="sidebar-header">
+            <div class="sidebar-title">📚 Your Learning</div>
+            <a href="#" class="see-all">View all</a>
+          </div>
+          <div>
+            {% for session in your_learning %}
+              <div class="trending-item">
+                <div class="trending-icon">📖</div>
+                <div class="trending-info">
+                  <div class="trending-name">{{ session.skill }}</div>
+                  <div class="trending-stats">{{ session.date|date:'M d, Y' }}</div>
+                </div>
+              </div>
+            {% empty %}
+              <div class="trending-item">
+                <div class="trending-icon">📖</div>
+                <div class="trending-info">
+                  <div class="trending-name">UI/UX Design</div>
+                  <div class="trending-stats">Last studied: 2 days ago</div>
+                </div>
+              </div>
+              <div class="trending-item">
+                <div class="trending-icon">📖</div>
+                <div class="trending-info">
+                  <div class="trending-name">Data Visualization</div>
+                  <div class="trending-stats">Last studied: 1 week ago</div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="copyright">© 2023 SkillSwap from Alex</div>
+      </div>
+    </div>
+
+    <!-- Comment Modal -->
+    <div class="comment-modal" id="commentModal">
+      <div class="comment-modal-content">
+        <div class="comment-modal-header">
+          Comments<div class="close-modal">&times;</div>
+        </div>
+        <div class="comment-list">
+          <div class="comment-item">
+            <div class="comment-avatar" style="background-color: #f59e0b;">M</div>
+            <div class="comment-content">
+              <div>
+                <span class="comment-username">mike_dev</span>
+                <span class="comment-text">This looks amazing! What tools did you use for the prototyping?</span>
+              </div>
+              <div class="comment-actions">
+                <span class="comment-action">2h</span>
+                <span class="comment-action">Reply</span>
+                <span class="comment-action"><i class="far fa-heart"></i> 12</span>
+              </div>
+            </div>
+          </div>
+          <div class="comment-item">
+            <div class="comment-avatar" style="background-color: #8b5cf6;">J</div>
+            <div class="comment-content">
+              <div>
+                <span class="comment-username">jess_ui</span>
+                <span class="comment-text">Love the color palette! The gradients work really well together.</span>
+              </div>
+              <div class="comment-actions">
+                <span class="comment-action">1h</span>
+                <span class="comment-action">Reply</span>
+                <span class="comment-action"><i class="far fa-heart"></i> 8</span>
+              </div>
+            </div>
+          </div>
+          <div class="comment-item">
+            <div class="comment-avatar" style="background-color: #3b82f6;">A</div>
+            <div class="comment-content">
+              <div>
+                <span class="comment-username">alex</span>
+                <span class="comment-text">The user flow seems really intuitive. Great work!</span>
+              </div>
+              <div class="comment-actions">
+                <span class="comment-action">45m</span>
+                <span class="comment-action">Reply</span>
+                <span class="comment-action"><i class="far fa-heart"></i> 3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="comment-input-container">
+          <input type="text" class="modal-comment-input" placeholder="Add a comment..." />
+          <button class="post-btn">Post</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="createPostModal">
+        <div class="create-post-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Create a Post</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            
+            <form id="createPostForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="success-message" id="successMessage">
+                        <i class="fas fa-check-circle"></i> Your post has been created successfully!
+                    </div>
+                    
+                    <div class="loading-overlay" id="loadingOverlay">
+                        <div class="spinner"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postTitle" class="form-label">Title *</label>
+                        <input type="text" id="postTitle" name="title" class="form-input" placeholder="What's your post about?" maxlength="200" required>
+                        <div class="character-count" id="titleCount">0/200</div>
+                        <div class="error-message" id="titleError">Please enter a title for your post</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postContent" class="form-label">Content *</label>
+                        <textarea id="postContent" name="content" class="form-textarea" placeholder="Share your knowledge, ask a question, or start a discussion..." required></textarea>
+                        <div class="character-count" id="contentCount">0 characters</div>
+                        <div class="error-message" id="contentError">Please enter content for your post</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Add Image (Optional)</label>
+                        <div class="image-upload-container" id="imageUploadContainer">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">Drag & drop an image or click to browse</div>
+                            <div class="upload-subtext">Supports JPG, PNG, GIF - Max 5MB</div>
+                            <input type="file" id="postImage" name="image" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="image-preview" id="imagePreview">
+                            <img src="" alt="Preview" class="preview-image" id="previewImage">
+                            <button type="button" class="remove-image" id="removeImage">Remove Image</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postSkills" class="form-label">Related Skills (Optional)</label>
+                        <div class="skill-select-container">
+                            <input type="text" id="postSkills" class="form-input" placeholder="Type to search for skills...">
+                            <div class="skill-suggestions" id="skillSuggestions"></div>
+                        </div>
+                        <div class="skills-container" id="selectedSkills"></div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn" id="cancelPost">Cancel</button>
+                    <button type="submit" class="submit-btn" id="submitPost" disabled>Create Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+  function setupProfileDropdown() {
+  const avatarBtn = document.getElementById('userAvatarBtn');
+  const dropdown = document.getElementById('profileDropdown');
+
+  if (!avatarBtn || !dropdown) return;
+
+  avatarBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    dropdown.classList.toggle('active');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function (e) {
+    if (!dropdown.contains(e.target) && e.target !== avatarBtn) {
+      dropdown.classList.remove('active');
+    }
+  });
+}
+
+// ----------------------------
+// Like Button Functionality
+// ----------------------------
+document.querySelectorAll('.like-btn').forEach((button) => {
+  button.addEventListener('click', function () {
+    const icon = this.querySelector('i');
+    const postId = this.getAttribute('data-post-id');
+
+    if (icon.classList.contains('far')) {
+      icon.classList.remove('far');
+      icon.classList.add('fas', 'liked');
+      console.log('Liked post:', postId);
+    } else {
+      icon.classList.remove('fas', 'liked');
+      icon.classList.add('far');
+      console.log('Unliked post:', postId);
+    }
+  });
+});
+
+// ----------------------------
+// Bookmark Button Functionality
+// ----------------------------
+document.querySelectorAll('.bookmark-btn').forEach((button) => {
+  button.addEventListener('click', function () {
+    const icon = this.querySelector('i');
+    const postId = this.getAttribute('data-post-id');
+
+    if (icon.classList.contains('far')) {
+      icon.classList.remove('far');
+      icon.classList.add('fas', 'bookmarked');
+      console.log('Bookmarked post:', postId);
+    } else {
+      icon.classList.remove('fas', 'bookmarked');
+      icon.classList.add('far');
+      console.log('Unbookmarked post:', postId);
+    }
+  });
+});
+
+// ----------------------------
+// Follow Button Functionality
+// ----------------------------
+document.querySelectorAll('.follow-btn').forEach((button) => {
+  button.addEventListener('click', function () {
+    const userId = this.getAttribute('data-user-id');
+
+    if (this.classList.contains('following')) {
+      this.classList.remove('following');
+      this.textContent = 'Follow';
+      console.log('Unfollowed user:', userId);
+    } else {
+      this.classList.add('following');
+      this.textContent = 'Following';
+      console.log('Followed user:', userId);
+    }
+  });
+});
+
+// ----------------------------
+// Comment Modal Functionality
+// ----------------------------
+const commentModal = document.getElementById('commentModal');
+const viewCommentsButtons = document.querySelectorAll('.view-comments');
+const closeCommentModal = document.querySelector('.close-modal');
+
+if (commentModal && closeCommentModal) {
+  viewCommentsButtons.forEach((button) => {
+    button.addEventListener('click', function () {
+      const postId = this.getAttribute('data-post-id');
+      commentModal.style.display = 'flex';
+      console.log('Loading comments for post:', postId);
+    });
+  });
+
+  closeCommentModal.addEventListener('click', function () {
+    commentModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', function (event) {
+    if (event.target === commentModal) {
+      commentModal.style.display = 'none';
+    }
+  });
+}
+
+// ----------------------------
+// Comment Input Functionality
+// ----------------------------
+document.querySelectorAll('.comment-input').forEach((input) => {
+  input.addEventListener('input', function () {
+    const postButton = this.nextElementSibling;
+    if (this.value.trim() !== '') {
+      postButton.classList.add('active');
+    } else {
+      postButton.classList.remove('active');
+    }
+  });
+});
+
+document.querySelectorAll('.post-comment').forEach((button) => {
+  button.addEventListener('click', function () {
+    const commentInput = this.previousElementSibling;
+    if (commentInput.value.trim() !== '') {
+      console.log('Posting comment:', commentInput.value);
+      commentInput.value = '';
+      this.classList.remove('active');
+    }
+  });
+});
+
+// Modal Post Comment
+const modalPostBtn = document.querySelector('.post-btn');
+if (modalPostBtn) {
+  modalPostBtn.addEventListener('click', function () {
+    const commentInput = document.querySelector('.modal-comment-input');
+    if (commentInput && commentInput.value.trim() !== '') {
+      console.log('Posting modal comment:', commentInput.value);
+      commentInput.value = '';
+    }
+  });
+}
+
+// ----------------------------
+// Infinite Scroll Simulation
+// ----------------------------
+let isLoading = false;
+
+function loadMorePosts() {
+  isLoading = true;
+  const loader = document.getElementById('loadingIndicator');
+  if (loader) loader.style.display = 'block';
+
+  setTimeout(() => {
+    console.log('Loading more posts...');
+    if (loader) loader.style.display = 'none';
+    isLoading = false;
+  }, 1500);
+}
+
+window.addEventListener('scroll', () => {
+  if (isLoading) return;
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000) {
+    loadMorePosts();
+  }
+});
+
+// ----------------------------
+// Create Post Modal Logic
+// ----------------------------
+document.addEventListener('DOMContentLoaded', () => {
+  setupProfileDropdown();
+
+  const createPostBtn = document.getElementById('createPostBtn');
+  const createPostModal = document.getElementById('createPostModal');
+  const closePostModalBtn = document.getElementById('closeModal');
+  const cancelPost = document.getElementById('cancelPost');
+  const createPostForm = document.getElementById('createPostForm');
+  const postTitle = document.getElementById('postTitle');
+  const postContent = document.getElementById('postContent');
+  const postImage = document.getElementById('postImage');
+  const imageUploadContainer = document.getElementById('imageUploadContainer');
+  const imagePreview = document.getElementById('imagePreview');
+  const previewImage = document.getElementById('previewImage');
+  const removeImage = document.getElementById('removeImage');
+  const postSkills = document.getElementById('postSkills');
+  const skillSuggestions = document.getElementById('skillSuggestions');
+  const selectedSkills = document.getElementById('selectedSkills');
+  const submitPost = document.getElementById('submitPost');
+  const titleCount = document.getElementById('titleCount');
+  const contentCount = document.getElementById('contentCount');
+  const titleError = document.getElementById('titleError');
+  const contentError = document.getElementById('contentError');
+  const successMessage = document.getElementById('successMessage');
+  const loadingOverlay = document.getElementById('loadingOverlay');
+
+  const availableSkills = [
+    { id: 1, name: 'Python' },
+    { id: 2, name: 'JavaScript' },
+    { id: 3, name: 'UI/UX Design' },
+    { id: 4, name: 'Data Analysis' },
+    { id: 5, name: 'Web Development' },
+    { id: 6, name: 'Mobile App Development' },
+    { id: 7, name: 'Graphic Design' },
+    { id: 8, name: 'Digital Marketing' },
+    { id: 9, name: 'Project Management' },
+    { id: 10, name: 'Machine Learning' }
+  ];
+
+  let selectedSkillIds = [];
+
+// Open modal (fixed so it only opens when user clicks)
+createPostBtn?.addEventListener('click', (e) => {
+  e.preventDefault();
+  createPostModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+});
+
+// Ensure modal is hidden by default on page load
+window.addEventListener('load', () => {
+  createPostModal.classList.remove('active');
+  document.body.style.overflow = 'auto';
+});
+
+  // Close modal
+  function closePostModal() {
+    createPostModal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    resetForm();
+  }
+
+  closePostModalBtn?.addEventListener('click', closePostModal);
+  cancelPost?.addEventListener('click', closePostModal);
+
+  createPostModal?.addEventListener('click', (e) => {
+    if (e.target === createPostModal) {
+      closePostModal();
+    }
+  });
+
+  // Validation
+  function validateForm() {
+    const titleValid = postTitle.value.trim().length > 0;
+    const contentValid = postContent.value.trim().length > 0;
+
+    titleError.style.display = titleValid ? 'none' : 'block';
+    contentError.style.display = contentValid ? 'none' : 'block';
+
+    submitPost.disabled = !(titleValid && contentValid);
+    return titleValid && contentValid;
+  }
+
+  // Character counts
+  postTitle?.addEventListener('input', () => {
+    const count = postTitle.value.length;
+    titleCount.textContent = `${count}/200`;
+    titleCount.classList.toggle('warning', count > 180);
+    validateForm();
+  });
+
+  postContent?.addEventListener('input', () => {
+    const count = postContent.value.length;
+    contentCount.textContent = `${count} characters`;
+    contentCount.classList.toggle('warning', count > 1000);
+    validateForm();
+  });
+
+  // Image upload
+  imageUploadContainer?.addEventListener('click', () => postImage.click());
+
+  postImage?.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+
+      if (!file.type.match('image.*')) {
+        alert('Please select an image file (JPG, PNG, GIF)');
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image size should be less than 5MB');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewImage.src = e.target.result;
+        imagePreview.style.display = 'block';
+        imageUploadContainer.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  removeImage?.addEventListener('click', () => {
+    postImage.value = '';
+    imagePreview.style.display = 'none';
+    imageUploadContainer.style.display = 'block';
+  });
+
+  // Skill search
+  postSkills?.addEventListener('input', () => {
+    const query = postSkills.value.toLowerCase().trim();
+
+    if (query.length === 0) {
+      skillSuggestions.style.display = 'none';
+      return;
+    }
+
+    const filteredSkills = availableSkills.filter(
+      (skill) =>
+        skill.name.toLowerCase().includes(query) &&
+        !selectedSkillIds.includes(skill.id)
+    );
+
+    if (filteredSkills.length > 0) {
+      skillSuggestions.innerHTML = filteredSkills
+        .map(
+          (skill) =>
+            `<div class="skill-suggestion" data-skill-id="${skill.id}">${skill.name}</div>`
+        )
+        .join('');
+      skillSuggestions.style.display = 'block';
+    } else {
+      skillSuggestions.style.display = 'none';
+    }
+  });
+
+  skillSuggestions?.addEventListener('click', (e) => {
+    if (e.target.classList.contains('skill-suggestion')) {
+      const skillId = parseInt(e.target.getAttribute('data-skill-id'));
+      if (!selectedSkillIds.includes(skillId)) {
+        selectedSkillIds.push(skillId);
+        renderSelectedSkills();
+      }
+      postSkills.value = '';
+      skillSuggestions.style.display = 'none';
+    }
+  });
+
+  function renderSelectedSkills() {
+    selectedSkills.innerHTML = selectedSkillIds
+      .map((id) => {
+        const skill = availableSkills.find((s) => s.id === id);
+        return `
+          <div class="skill-tag">
+            ${skill.name}
+            <button type="button" class="remove-skill" data-skill-id="${id}">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>`;
+      })
+      .join('');
+  }
+
+  selectedSkills?.addEventListener('click', (e) => {
+    if (e.target.closest('.remove-skill')) {
+      const skillId = parseInt(
+        e.target.closest('.remove-skill').getAttribute('data-skill-id')
+      );
+      selectedSkillIds = selectedSkillIds.filter((id) => id !== skillId);
+      renderSelectedSkills();
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.skill-select-container')) {
+      skillSuggestions.style.display = 'none';
+    }
+  });
+
+ 
+
+  function resetForm() {
+    createPostForm.reset();
+    selectedSkillIds = [];
+    selectedSkills.innerHTML = '';
+    imagePreview.style.display = 'none';
+    imageUploadContainer.style.display = 'block';
+    successMessage.style.display = 'none';
+    titleError.style.display = 'none';
+    contentError.style.display = 'none';
+    titleCount.textContent = '0/200';
+    contentCount.textContent = '0 characters';
+    titleCount.classList.remove('warning');
+    contentCount.classList.remove('warning');
+    submitPost.disabled = true;
+  }
+
+  validateForm();
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const modal = document.getElementById("createPostModal");
+    const openBtn = document.getElementById("createPostBtn");
+    const closeBtn = document.getElementById("closeModal");
+    const postForm = document.getElementById("createPostForm");
+    const postContainer = document.querySelector(".posts"); // parent div of all posts
+
+    // 🟢 Open modal
+    openBtn.addEventListener("click", () => modal.style.display = "flex");
+
+    // 🔴 Close modal
+    closeBtn.addEventListener("click", () => modal.style.display = "none");
+
+    // 🟣 Submit form via AJAX
+    postForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+
+        fetch("{% url 'user_index' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                // 🆕 Create new post element dynamically
+                const newPost = `
+                  <div class="post">
+                    <div class="post-header">
+                      <div class="post-user">
+                        <div class="post-avatar" style="background-color:#06b6d4;">${data.user[0]}</div>
+                        <div>
+                          <div class="post-username">${data.user}</div>
+                          <div class="post-skill">SkillSwap User</div>
+                        </div>
+                      </div>
+                      <div class="post-options"><i class="fas fa-ellipsis-h"></i></div>
+                    </div>
+                    <div class="post-image">
+                      ${data.image ? `<img src="${data.image}" alt="${data.title}" style="width:100%;height:auto;">` : `<i class="fas fa-lightbulb"></i> ${data.title}`}
+                    </div>
+                    <div class="post-caption">
+                      <span class="post-caption-username">${data.user}</span> ${data.content}
+                      <span class="post-tags">${data.tags}</span>
+                    </div>
+                    <div class="post-time">${data.created_at}</div>
+                  </div>
+                `;
+
+                postContainer.insertAdjacentHTML("afterbegin", newPost);
+                modal.style.display = "none";
+                postForm.reset();
+            }
+        });
+    });
+});
+
+
+  // Elements
+  const modal = document.getElementById("createPostModal");
+  const openBtn = document.getElementById("createPostBtn");
+  const cancelBtn = document.getElementById("cancelBtn");
+
+  // Open modal when + button is clicked
+  openBtn.addEventListener("click", () => {
+    modal.style.display = "flex";
+  });
+
+  // Close modal
+  cancelBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  // Close when clicking outside the modal box
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+const openModal = (modalEl) => {
+  modalEl.style.display = 'flex';
+  // give browser a tick so CSS 'display:flex' applies before locking body
+  setTimeout(() => document.body.style.overflow = 'hidden', 0);
+};
+
+const closeModal = (modalEl) => {
+  modalEl.style.display = 'none';
+  document.body.style.overflow = 'auto';
+};
+
+
+    </script>
+  </body>
+</html>

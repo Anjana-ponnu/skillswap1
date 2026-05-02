@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - SkillSwap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.5;
+        }
+
+        .header {
+            background-color: white;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 16px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-icon {
+            position: relative;
+            font-size: 20px;
+            text-decoration: none;
+            color: #64748b;
+            transition: color 0.2s;
+        }
+
+        .nav-icon:hover {
+            color: #3b82f6;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background-color: #ef4444;
+            border-radius: 50%;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .settings-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .settings-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .settings-container {
+            display: flex;
+            gap: 24px;
+        }
+
+        .settings-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+        }
+
+        .settings-content {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .settings-nav {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: #334155;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: #f8fafc;
+            color: #3b82f6;
+        }
+
+        .nav-item.active {
+            background-color: #eff6ff;
+            color: #3b82f6;
+            border-left-color: #3b82f6;
+            font-weight: 500;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-text {
+            flex: 1;
+        }
+
+        .settings-section {
+            padding: 0;
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        .section-header {
+            padding: 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .section-description {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .section-content {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-text {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .profile-picture {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .toggle-info {
+            flex: 1;
+        }
+
+        .toggle-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .toggle-description {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #d1d5db;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #3b82f6;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .skill-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #eff6ff;
+            color: #1e40af;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .remove-skill {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+        }
+
+        .add-skill {
+            display: flex;
+            gap: 12px;
+        }
+
+        .add-skill-input {
+            flex: 1;
+        }
+
+        .danger-zone {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 32px;
+        }
+
+        .danger-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 8px;
+        }
+
+        .danger-description {
+            color: #b91c1c;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .settings-container {
+                flex-direction: column;
+            }
+            
+            .settings-sidebar {
+                width: 100%;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-container">
+            <a href="{% url 'user_index' %}" class="logo">SkillSwap</a>
+            
+            <div class="nav-icons">
+                <a href="{% url 'user_index' %}" class="nav-icon">🏠</a>
+                <a href="#" class="nav-icon">➕</a>
+                <a href="#" class="nav-icon">🧭</a>
+                <a href="#" class="nav-icon">
+                    ❤️
+                    <span class="notification-dot"></span>
+                </a>
+                <a href="{% url 'user_profile' %}" class="nav-icon">👤</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="settings-header">
+            <div>
+                <h1 class="settings-title">Settings</h1>
+                <p class="settings-subtitle">Manage your account settings and preferences</p>
+            </div>
+        </div>
+
+        <div class="settings-container">
+            <!-- Settings Sidebar -->
+            <div class="settings-sidebar">
+                <div class="settings-nav">
+                    <a href="#" class="nav-item active" data-section="profile">
+                        <span class="nav-icon">👤</span>
+                        <span class="nav-text">Profile</span>
+                    </a>
+                    <a href="#" class="nav-item" data-section="account">
+                        <span class="nav-icon">🔒</span>
+                        <span class="nav-text">Account</span>
+                    </a>
+                    <a href="#" class="nav-item" data-section="privacy">
+                        <span class="nav-icon">🛡️</span>
+                        <span class="nav-text">Privacy & Safety</span>
+                    </a>
+                    <a href="#" class="nav-item" data-section="notifications">
+                        <span class="nav-icon">🔔</span>
+                        <span class="nav-text">Notifications</span>
+                    </a>
+                    <a href="#" class="nav-item" data-section="skills">
+                        <span class="nav-icon">💼</span>
+                        <span class="nav-text">Skills & Interests</span>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Quick Actions</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button class="btn btn-secondary">Download My Data</button>
+                        <button class="btn btn-secondary">Help Center</button>
+                        <button class="btn btn-secondary">Send Feedback</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div class="settings-content">
+                <!-- Profile Section -->
+                <div class="settings-section active" id="profile-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Profile Settings</h2>
+                        <p class="section-description">Manage your public profile information</p>
+                    </div>
+                    <div class="section-content">
+                        <div class="profile-picture">
+                            <div class="profile-avatar">JD</div>
+                            <div class="profile-actions">
+                                <button class="btn btn-secondary">Change Photo</button>
+                                <button class="btn btn-secondary">Remove Photo</button>
+                            </div>
+                        </div>
+
+                        <div class="two-column">
+                            <div class="form-group">
+                                <label class="form-label" for="first-name">First Name</label>
+                                <input type="text" class="form-control" id="first-name" value="John">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="last-name">Last Name</label>
+                                <input type="text" class="form-control" id="last-name" value="Doe">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="username">Username</label>
+                            <input type="text" class="form-control" id="username" value="johndoe">
+                            <p class="form-text">This is your unique identifier on SkillSwap</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="bio">Bio</label>
+                            <textarea class="form-control" id="bio" rows="4">UI/UX Designer with 5 years of experience. Passionate about creating user-centered designs and sharing knowledge with the community.</textarea>
+                            <p class="form-text">Tell others about yourself and your skills</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="location">Location</label>
+                            <input type="text" class="form-control" id="location" value="San Francisco, CA">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="website">Website</label>
+                            <input type="url" class="form-control" id="website" value="https://johndoe.design">
+                        </div>
+
+                        <button class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+
+                <!-- Account Section -->
+                <div class="settings-section" id="account-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Account Settings</h2>
+                        <p class="section-description">Manage your account security and login information</p>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address</label>
+                            <input type="email" class="form-control" id="email" value="john.doe@example.com">
+                            <p class="form-text">Your email address is used for account notifications</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="phone">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" value="+1 (555) 123-4567">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="current-password">Current Password</label>
+                            <input type="password" class="form-control" id="current-password">
+                        </div>
+
+                        <div class="two-column">
+                            <div class="form-group">
+                                <label class="form-label" for="new-password">New Password</label>
+                                <input type="password" class="form-control" id="new-password">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="confirm-password">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirm-password">
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary">Update Password</button>
+
+                        <div class="danger-zone">
+                            <h3 class="danger-title">Delete Account</h3>
+                            <p class="danger-description">Once you delete your account, there is no going back. Please be certain.</p>
+                            <button class="btn btn-danger">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy Section -->
+                <div class="settings-section" id="privacy-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Privacy & Safety</h2>
+                        <p class="section-description">Control your privacy and safety settings</p>
+                    </div>
+                    <div class="section-content">
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Private Account</div>
+                                <div class="toggle-description">Only approved followers can see your posts</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Show Activity Status</div>
+                                <div class="toggle-description">Allow others to see when you're active</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Allow Direct Messages</div>
+                                <div class="toggle-description">Allow others to send you direct messages</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Content Filtering</div>
+                                <div class="toggle-description">Filter out potentially sensitive content</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Data Sharing</div>
+                                <div class="toggle-description">Allow SkillSwap to use your data to improve services</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="blocked-users">Blocked Users</label>
+                            <input type="text" class="form-control" id="blocked-users" placeholder="Search for users to block">
+                            <p class="form-text">You have 2 users blocked</p>
+                        </div>
+
+                        <button class="btn btn-primary">Save Privacy Settings</button>
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div class="settings-section" id="notifications-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Notification Settings</h2>
+                        <p class="section-description">Manage how and when you receive notifications</p>
+                    </div>
+                    <div class="section-content">
+                        <h3 style="margin-bottom: 16px; font-weight: 600;">Push Notifications</h3>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Likes & Comments</div>
+                                <div class="toggle-description">When someone likes or comments on your posts</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <div class="toggle-title">New Followers</div>
+                                <div class="toggle-description">When someone follows you</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Direct Messages</div>
+                                <div class="toggle-description">When you receive a direct message</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Skill Recommendations</div>
+                                <div class="toggle-description">Personalized skill recommendations</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <h3 style="margin: 24px 0 16px; font-weight: 600;">Email Notifications</h3>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Weekly Digest</div>
+                                <div class="toggle-description">A weekly summary of your activity</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Product Updates</div>
+                                <div class="toggle-description">News about new features and improvements</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <button class="btn btn-primary">Save Notification Settings</button>
+                    </div>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="settings-section" id="skills-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Skills & Interests</h2>
+                        <p class="section-description">Manage the skills you teach and want to learn</p>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label class="form-label">Skills You Teach</label>
+                            <div class="skills-list">
+                                <div class="skill-tag">
+                                    <span>UI/UX Design</span>
+                                    <button class="remove-skill">×</button>
+                                </div>
+                                <div class="skill-tag">
+                                    <span>Figma</span>
+                                    <button class="remove-skill">×</button>
+                                </div>
+                                <div class="skill-tag">
+                                    <span>Prototyping</span>
+                                    <button class="remove-skill">×</button>
+                                </div>
+                                <div class="skill-tag">
+                                    <span>User Research</span>
+                                    <button class="remove-skill">×</button>
+                                </div>
+                            </div>
+                            <div class="add-skill">
+                                <input type="text" class="form-control add-skill-input" placeholder="Add a skill you teach">
+                                <button class="btn btn-primary">Add</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Skills You're Learning</label>
+                            <div class="skills-list">
+                                <div class="skill-tag">
+                                    <span>React.js</span>
+                                    <button class="remove-skill">×</button>
+                                </div>
+                                <div class="skill-tag">
+                                    <span>Data Visualization</span>
+                                    <button class="remove-skill">×</button>
+                                </div>
+                                <div class="skill-tag">
+                                    <span>Python</span>
+                                    <button class="remove-skill">×</button>
+                                </div>
+                            </div>
+                            <div class="add-skill">
+                                <input type="text" class="form-control add-skill-input" placeholder="Add a skill you're learning">
+                                <button class="btn btn-primary">Add</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Skill Level Display</label>
+                            <div style="display: flex; gap: 12px;">
+                                <label style="display: flex; align-items: center; gap: 6px;">
+                                    <input type="radio" name="skill-level" checked>
+                                    <span>Show on profile</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px;">
+                                    <input type="radio" name="skill-level">
+                                    <span>Hide from profile</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary">Save Skills</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Settings navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('.settings-section');
+            
+            // Navigation item click handler
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all items
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Get the target section
+                    const sectionId = this.getAttribute('data-section');
+                    
+                    // Hide all sections
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    // Show target section
+                    document.getElementById(`${sectionId}-section`).classList.add('active');
+                });
+            });
+            
+            // Toggle switch functionality
+            const toggleSwitches = document.querySelectorAll('.toggle-switch input');
+            toggleSwitches.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    console.log(`Toggle ${this.checked ? 'enabled' : 'disabled'}`);
+                });
+            });
+            
+            // Remove skill functionality
+            const removeSkillButtons = document.querySelectorAll('.remove-skill');
+            removeSkillButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const skillTag = this.closest('.skill-tag');
+                    skillTag.style.opacity = '0';
+                    setTimeout(() => {
+                        skillTag.remove();
+                    }, 300);
+                });
+            });
+            
+            // Add skill functionality
+            const addSkillButtons = document.querySelectorAll('.add-skill .btn');
+            addSkillButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const addSkillContainer = this.closest('.add-skill');
+                    const input = addSkillContainer.querySelector('input');
+                    const skillName = input.value.trim();
+                    
+                    if (skillName) {
+                        const skillsList = addSkillContainer.previousElementSibling;
+                        const newSkill = document.createElement('div');
+                        newSkill.className = 'skill-tag';
+                        newSkill.innerHTML = `
+                            <span>${skillName}</span>
+                            <button class="remove-skill">×</button>
+                        `;
+                        skillsList.appendChild(newSkill);
+                        
+                        // Add event listener to new remove button
+                        newSkill.querySelector('.remove-skill').addEventListener('click', function() {
+                            const skillTag = this.closest('.skill-tag');
+                            skillTag.style.opacity = '0';
+                            setTimeout(() => {
+                                skillTag.remove();
+                            }, 300);
+                        });
+                        
+                        // Clear input
+                        input.value = '';
+                    }
+                });
+            });
+            
+            // Save buttons functionality
+            const saveButtons = document.querySelectorAll('.btn-primary');
+            saveButtons.forEach(button => {
+                if (button.textContent.includes('Save')) {
+                    button.addEventListener('click', function() {
+                        const originalText = this.textContent;
+                        this.textContent = 'Saving...';
+                        this.disabled = true;
+                        
+                        setTimeout(() => {
+                            this.textContent = 'Saved!';
+                            setTimeout(() => {
+                                this.textContent = originalText;
+                                this.disabled = false;
+                            }, 1500);
+                        }, 1000);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

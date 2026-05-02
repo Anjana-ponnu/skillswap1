@@ -1,0 +1,25 @@
+
+{% block content %}
+<h2>Edit Profile</h2>
+<form method="POST" action="{% url 'update_profile' %}">
+    {% csrf_token %}
+    
+    <label>Name</label>
+    <input type="text" name="name" value="{{ user.name }}" required><br>
+
+    <label>Email</label>
+    <input type="email" name="email" value="{{ user.email }}" required><br>
+
+    <label>Phone</label>
+    <input type="text" name="phone_no" value="{{ user.phone_no }}"><br>
+
+    <label>Skills Offered (comma separated)</label>
+    <input type="text" name="skills_offered" value="{{ user.skills_offered }}"><br>
+
+    <label>Skills Needed (comma separated)</label>
+    <input type="text" name="skills_needed" value="{{ user.skills_needed }}"><br>
+
+    <button type="submit">Save Changes</button>
+    <a href="{% url 'user_profile' %}">Cancel</a>
+</form>
+{% endblock %}

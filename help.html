@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - SkillSwap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.5;
+        }
+
+        .header {
+            background-color: white;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 16px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-icon {
+            position: relative;
+            font-size: 20px;
+            text-decoration: none;
+            color: #64748b;
+            transition: color 0.2s;
+        }
+
+        .nav-icon:hover {
+            color: #3b82f6;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background-color: #ef4444;
+            border-radius: 50%;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        .help-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .help-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .help-subtitle {
+            font-size: 18px;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 50px;
+            font-size: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 2px 15px rgba(59, 130, 246, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 20px;
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .help-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px 24px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .help-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1e293b;
+        }
+
+        .card-description {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .card-link {
+            color: #3b82f6;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-link:hover {
+            text-decoration: underline;
+        }
+
+        .faq-section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .see-all {
+            font-size: 14px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .faq-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .faq-question:hover {
+            background-color: #f8fafc;
+        }
+
+        .faq-question-text {
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .faq-toggle {
+            color: #64748b;
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+
+        .faq-answer {
+            padding: 0 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: #64748b;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 24px 20px;
+            max-height: 500px;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .contact-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .contact-method {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 24px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .contact-method:hover {
+            background-color: #f1f5f9;
+        }
+
+        .contact-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+            background-color: #eff6ff;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .contact-description {
+            color: #64748b;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .contact-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .contact-btn:hover {
+            background-color: #2563eb;
+        }
+
+        .resources-section {
+            margin-bottom: 40px;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .resource-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .resource-icon {
+            font-size: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background-color: #eff6ff;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .resource-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .resource-description {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .resource-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .resource-link {
+            color: #3b82f6;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+
+        .community-section {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 12px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .community-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .community-description {
+            font-size: 16px;
+            margin-bottom: 24px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .community-btn {
+            background-color: white;
+            color: #3b82f6;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .community-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .status-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #10b981;
+        }
+
+        .status-text {
+            font-weight: 500;
+        }
+
+        .status-link {
+            margin-left: auto;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .status-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .help-title {
+                font-size: 28px;
+            }
+            
+            .help-subtitle {
+                font-size: 16px;
+            }
+            
+            .contact-grid, .resources-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .community-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-container">
+            <a href="{% url 'user_index' %}" class="logo">SkillSwap</a>
+            
+            <div class="nav-icons">
+                <a href="{% url 'user_index' %}" class="nav-icon">🏠</a>
+                <a href="#" class="nav-icon">➕</a>
+                <a href="#" class="nav-icon">🧭</a>
+                <a href="#" class="nav-icon">
+                    ❤️
+                    <span class="notification-dot"></span>
+                </a>
+                <a href="{% url 'user_profile' %}" class="nav-icon">👤</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="help-header">
+            <h1 class="help-title">How can we help you?</h1>
+            <p class="help-subtitle">Find answers to common questions, get troubleshooting help, and learn how to make the most of SkillSwap</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search for help articles...">
+            <div class="search-icon">🔍</div>
+        </div>
+
+        <div class="help-grid">
+            <div class="help-card">
+                <div class="card-icon">📚</div>
+                <h3 class="card-title">Getting Started</h3>
+                <p class="card-description">New to SkillSwap? Learn the basics and set up your account</p>
+                <a href="#" class="card-link">View guides →</a>
+            </div>
+            
+            <div class="help-card">
+                <div class="card-icon">💼</div>
+                <h3 class="card-title">Account & Profile</h3>
+                <p class="card-description">Manage your account settings, profile, and privacy options</p>
+                <a href="#" class="card-link">Learn more →</a>
+            </div>
+            
+            <div class="help-card">
+                <div class="card-icon">🔧</div>
+                <h3 class="card-title">Troubleshooting</h3>
+                <p class="card-description">Solve common issues with login, payments, and technical problems</p>
+                <a href="#" class="card-link">Get help →</a>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <div class="section-header">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <a href="#" class="see-all">View all FAQs</a>
+            </div>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <div class="faq-question-text">How do I reset my password?</div>
+                        <div class="faq-toggle">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>To reset your password, go to the login page and click "Forgot Password". Enter your email address and we'll send you a link to reset your password. Make sure to check your spam folder if you don't see the email in your inbox.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <div class="faq-question-text">How can I become a skill teacher?</div>
+                        <div class="faq-toggle">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>To become a skill teacher, go to your profile settings and select "Become a Teacher". You'll need to verify your skills through our assessment process or by providing examples of your work. Once approved, you can start creating courses and offering your expertise to the community.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <div class="faq-question-text">Can I download courses for offline viewing?</div>
+                        <div class="faq-toggle">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, SkillSwap Premium members can download courses for offline viewing. Look for the download icon on course pages. Downloaded content is available for 30 days before needing to be refreshed with an internet connection.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <div class="faq-question-text">How do I report inappropriate content?</div>
+                        <div class="faq-toggle">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>If you encounter content that violates our community guidelines, click the three-dot menu on the post or course and select "Report". Our moderation team will review the content and take appropriate action. You can also email safety@skillswap.com with details.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <div class="faq-question-text">What payment methods do you accept?</div>
+                        <div class="faq-toggle">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and in some regions, Apple Pay and Google Pay. For enterprise accounts, we also offer invoice-based billing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h2 class="section-title" style="margin-bottom: 24px;">Contact Support</h2>
+            <div class="contact-grid">
+                <div class="contact-method">
+                    <div class="contact-icon">💬</div>
+                    <h3 class="contact-title">Live Chat</h3>
+                    <p class="contact-description">Get immediate help from our support team</p>
+                    <button class="contact-btn">Start Chat</button>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">📧</div>
+                    <h3 class="contact-title">Email Support</h3>
+                    <p class="contact-description">Send us a message and we'll respond within 24 hours</p>
+                    <button class="contact-btn">Send Email</button>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">📞</div>
+                    <h3 class="contact-title">Phone Support</h3>
+                    <p class="contact-description">Speak directly with a support representative</p>
+                    <button class="contact-btn">Call Now</button>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">🐦</div>
+                    <h3 class="contact-title">Social Media</h3>
+                    <p class="contact-description">Reach out to us on Twitter or Facebook</p>
+                    <button class="contact-btn">Message Us</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="resources-section">
+            <div class="section-header">
+                <h2 class="section-title">Helpful Resources</h2>
+                <a href="#" class="see-all">View all resources</a>
+            </div>
+            
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon">📖</div>
+                        <div>
+                            <h3 class="resource-title">User Guides</h3>
+                            <p class="resource-description">Step-by-step tutorials for using SkillSwap features</p>
+                        </div>
+                    </div>
+                    <div class="resource-links">
+                        <a href="#" class="resource-link">Getting Started Guide</a>
+                        <a href="#" class="resource-link">Teacher Handbook</a>
+                        <a href="#" class="resource-link">Troubleshooting Common Issues</a>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon">🎥</div>
+                        <div>
+                            <h3 class="resource-title">Video Tutorials</h3>
+                            <p class="resource-description">Watch video guides for visual learners</p>
+                        </div>
+                    </div>
+                    <div class="resource-links">
+                        <a href="#" class="resource-link">Profile Setup</a>
+                        <a href="#" class="resource-link">Creating Your First Course</a>
+                        <a href="#" class="resource-link">Advanced Features</a>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon">📋</div>
+                        <div>
+                            <h3 class="resource-title">Community Guidelines</h3>
+                            <p class="resource-description">Understand our policies and community standards</p>
+                        </div>
+                    </div>
+                    <div class="resource-links">
+                        <a href="#" class="resource-link">Code of Conduct</a>
+                        <a href="#" class="resource-link">Content Policies</a>
+                        <a href="#" class="resource-link">Safety Center</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="community-section">
+            <h2 class="community-title">Join Our Community</h2>
+            <p class="community-description">Connect with other SkillSwap users, share experiences, and get help from community experts in our forums and discussion groups.</p>
+            <button class="community-btn">Visit Community Forums</button>
+        </div>
+
+        <div class="status-section">
+            <div class="status-indicator"></div>
+            <div class="status-text">All systems operational</div>
+            <a href="#" class="status-link">Check System Status</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // FAQ toggle functionality
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', () => {
+                    // Close all other FAQ items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+            });
+            
+            // Search functionality
+            const searchInput = document.querySelector('.search-input');
+            
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    const query = this.value.trim();
+                    if (query) {
+                        alert(`Searching for: "${query}" - This would trigger a search in a real application`);
+                        // In a real app, this would redirect to search results
+                    }
+                }
+            });
+            
+            // Contact button functionality
+            const contactButtons = document.querySelectorAll('.contact-btn');
+            
+            contactButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const method = this.closest('.contact-method').querySelector('.contact-title').textContent;
+                    
+                    switch(method) {
+                        case 'Live Chat':
+                            alert('Opening live chat...');
+                            break;
+                        case 'Email Support':
+                            window.location.href = 'mailto:support@skillswap.com';
+                            break;
+                        case 'Phone Support':
+                            alert('Calling +1 (555) 123-HELP');
+                            break;
+                        case 'Social Media':
+                            alert('Redirecting to our social media profiles...');
+                            break;
+                    }
+                });
+            });
+            
+            // Help card click functionality
+            const helpCards = document.querySelectorAll('.help-card');
+            
+            helpCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const title = this.querySelector('.card-title').textContent;
+                    alert(`Navigating to ${title} section`);
+                    // In a real app, this would navigate to the appropriate help section
+                });
+            });
+            
+            // Community button functionality
+            const communityBtn = document.querySelector('.community-btn');
+            
+            communityBtn.addEventListener('click', function() {
+                alert('Redirecting to community forums...');
+                // In a real app, this would open the community forums
+            });
+        });
+    </script>
+</body>
+</html>

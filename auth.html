@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillSwap | Login & Register</title>
+  <link rel="stylesheet" href="{% static 'auth.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h2>SkillSwap Portal</h2>
+    
+<!-- Tab Switch --> 
+ <input type="radio" id="tab-login" name="tab" checked> 
+ <input type="radio" id="tab-register" name="tab"> 
+ <div class="tabs"> <label for="tab-login">Login</label> 
+  <label for="tab-register">Register</label> 
+</div>
+ <div class="form-container"> 
+  <!-- Login Form --> 
+   <div class="form login-form"> 
+    <form method="post" action="{% url 'chklogin' %}"> 
+      {% csrf_token %} 
+      <div class="input-group"> 
+        <label>Email</label> 
+        <input type="email" name="email" required> 
+      </div> 
+      <div class="input-group"> 
+        <label>Password</label> 
+        <input type="password" name="password" required>
+      </div> 
+      <button type="submit">Login</button>
+    </form>
+      </div> <!-- Register Form -->
+        <div class="form register-form"> 
+          <form method="post" action="{% url 'save_user' %}">
+            {% csrf_token %} 
+            <div class="input-group"> 
+              <label>Name</label> 
+              <input type="text" name="name" placeholder="Full Name" required> 
+            </div>
+            <div class="input-group"> 
+              <label>Email</label> 
+              <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+            <div class="input-group">
+              <label>Password</label> 
+              <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="input-group"> 
+              <label>Phone No</label> 
+              <input type="text" name="phone_no" placeholder="Phone Number" required>
+            </div> 
+            <div class="input-group"> 
+              <label>Skills</label>
+             <input type="text" name="skills_offered" placeholder="Skills Offered">
+             <input type="text" name="skills_needed" placeholder="Skills Needed">
+            </div>
+           <button type="submit" name="register_btn">Register</button>
+    </form> 
+  </div> 
+</div>
+</body>
+</html>

@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Posts - SkillSwap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.5;
+        }
+
+        .header {
+            background-color: white;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 16px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-icon {
+            position: relative;
+            font-size: 20px;
+            text-decoration: none;
+            color: #64748b;
+            transition: color 0.2s;
+        }
+
+        .nav-icon:hover {
+            color: #3b82f6;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background-color: #ef4444;
+            border-radius: 50%;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .main-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 16px;
+            gap: 24px;
+        }
+
+        .sidebar {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .right-sidebar {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .see-all {
+            font-size: 14px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .saved-tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 12px 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            color: #3b82f6;
+            border-bottom: 2px solid #3b82f6;
+        }
+
+        .tab:hover:not(.active) {
+            color: #64748b;
+            background-color: #f8fafc;
+        }
+
+        .saved-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .filter-btn:hover:not(.active) {
+            background-color: #f1f5f9;
+        }
+
+        .saved-posts {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .saved-post {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .saved-post:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .post-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .post-user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-username {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .post-skill {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .post-action-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #64748b;
+            transition: color 0.2s;
+            padding: 4px;
+        }
+
+        .post-action-btn:hover {
+            color: #3b82f6;
+        }
+
+        .post-action-btn.unsave {
+            color: #ef4444;
+        }
+
+        .post-action-btn.unsave:hover {
+            color: #dc2626;
+        }
+
+        .post-content {
+            position: relative;
+        }
+
+        .post-image {
+            background-color: #f1f5f9;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #64748b;
+        }
+
+        .post-text {
+            padding: 16px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 16px 16px;
+        }
+
+        .post-tag {
+            background-color: #eff6ff;
+            color: #3b82f6;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-top: 1px solid #f1f5f9;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .post-date {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .post-collection {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #f8fafc;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        .empty-desc {
+            margin-bottom: 24px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .explore-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .explore-btn:hover {
+            background-color: #2563eb;
+        }
+
+        .collection-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .collection-card:hover {
+            background-color: #f1f5f9;
+        }
+
+        .collection-card.active {
+            background-color: #eff6ff;
+            border: 1px solid #3b82f6;
+        }
+
+        .collection-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .collection-info {
+            flex: 1;
+        }
+
+        .collection-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .collection-count {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .create-collection-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+
+        .create-collection-btn:hover {
+            background-color: #f1f5f9;
+        }
+
+        .add-icon {
+            font-size: 20px;
+            color: #64748b;
+        }
+
+        .add-text {
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .suggestion-card {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            cursor: pointer;
+        }
+
+        .suggestion-card:not(:last-child) {
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .suggestion-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .suggestion-info {
+            flex: 1;
+        }
+
+        .suggestion-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .suggestion-skill {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .follow-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .follow-btn:hover {
+            background-color: #2563eb;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar, .right-sidebar {
+                width: 100%;
+            }
+
+            .saved-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-container">
+            <a href="{% url 'user_index' %}" class="logo">SkillSwap</a>
+            
+            <div class="nav-icons">
+                <a href="{% url 'user_index' %}" class="nav-icon">🏠</a>
+                <a href="#" class="nav-icon">➕</a>
+                <a href="#" class="nav-icon">🧭</a>
+                <a href="#" class="nav-icon">
+                    ❤️
+                    <span class="notification-dot"></span>
+                </a>
+                <a href="{% url 'user_profile' %}" class="nav-icon">👤</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Saved Collections</div>
+                    <a href="#" class="see-all">Manage</a>
+                </div>
+                
+                <div class="collection-card active">
+                    <div class="collection-icon">⭐</div>
+                    <div class="collection-info">
+                        <div class="collection-name">All Saved Posts</div>
+                        <div class="collection-count">24 posts</div>
+                    </div>
+                </div>
+                
+                <div class="collection-card">
+                    <div class="collection-icon">🎨</div>
+                    <div class="collection-info">
+                        <div class="collection-name">UI/UX Design</div>
+                        <div class="collection-count">8 posts</div>
+                    </div>
+                </div>
+                
+                <div class="collection-card">
+                    <div class="collection-icon">🌐</div>
+                    <div class="collection-info">
+                        <div class="collection-name">Web Development</div>
+                        <div class="collection-count">6 posts</div>
+                    </div>
+                </div>
+                
+                <div class="collection-card">
+                    <div class="collection-icon">📊</div>
+                    <div class="collection-info">
+                        <div class="collection-name">Data Analysis</div>
+                        <div class="collection-count">4 posts</div>
+                    </div>
+                </div>
+                
+                <div class="collection-card">
+                    <div class="collection-icon">📝</div>
+                    <div class="collection-info">
+                        <div class="collection-name">Content Writing</div>
+                        <div class="collection-count">3 posts</div>
+                    </div>
+                </div>
+                
+                <div class="create-collection-btn">
+                    <div class="add-icon">+</div>
+                    <div class="add-text">Create New Collection</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Saved Posts</div>
+                    <div class="saved-count">24 posts</div>
+                </div>
+                
+                <div class="saved-tabs">
+                    <div class="tab active" data-tab="all">All Posts</div>
+                    <div class="tab" data-tab="tutorials">Tutorials</div>
+                    <div class="tab" data-tab="inspiration">Inspiration</div>
+                    <div class="tab" data-tab="resources">Resources</div>
+                    <div class="tab" data-tab="tips">Tips & Tricks</div>
+                </div>
+                
+                <div class="saved-filters">
+                    <div class="filter-btn active">Recently Saved</div>
+                    <div class="filter-btn">Most Viewed</div>
+                    <div class="filter-btn">Alphabetical</div>
+                    <div class="filter-btn">By Skill</div>
+                </div>
+                
+                <div class="saved-posts" id="all-posts">
+                    <div class="saved-post">
+                        <div class="post-header">
+                            <div class="post-user">
+                                <div class="post-avatar">JD</div>
+                                <div class="post-user-info">
+                                    <div class="post-username">Jane Doe</div>
+                                    <div class="post-skill">UI/UX Designer</div>
+                                </div>
+                            </div>
+                            <div class="post-actions">
+                                <button class="post-action-btn">↗️</button>
+                                <button class="post-action-btn unsave">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <div class="post-image">🎨</div>
+                            <div class="post-text">
+                                Just completed this mobile app design for a fitness tracker. Focused on creating an intuitive user experience with clear data visualization.
+                            </div>
+                            <div class="post-tags">
+                                <span class="post-tag">#UIDesign</span>
+                                <span class="post-tag">#MobileApp</span>
+                                <span class="post-tag">#Fitness</span>
+                            </div>
+                        </div>
+                        <div class="post-footer">
+                            <div class="post-date">
+                                <span>📅</span>
+                                <span>Saved 2 days ago</span>
+                            </div>
+                            <div class="post-collection">
+                                <span>📁</span>
+                                <span>UI/UX Design</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="saved-post">
+                        <div class="post-header">
+                            <div class="post-user">
+                                <div class="post-avatar">AS</div>
+                                <div class="post-user-info">
+                                    <div class="post-username">Alex Smith</div>
+                                    <div class="post-skill">Web Developer</div>
+                                </div>
+                            </div>
+                            <div class="post-actions">
+                                <button class="post-action-btn">↗️</button>
+                                <button class="post-action-btn unsave">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <div class="post-text">
+                                Comprehensive guide to React performance optimization techniques. Covers memoization, code splitting, lazy loading, and virtualization for large lists.
+                            </div>
+                            <div class="post-tags">
+                                <span class="post-tag">#React</span>
+                                <span class="post-tag">#Performance</span>
+                                <span class="post-tag">#WebDev</span>
+                            </div>
+                        </div>
+                        <div class="post-footer">
+                            <div class="post-date">
+                                <span>📅</span>
+                                <span>Saved 1 week ago</span>
+                            </div>
+                            <div class="post-collection">
+                                <span>📁</span>
+                                <span>Web Development</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="saved-post">
+                        <div class="post-header">
+                            <div class="post-user">
+                                <div class="post-avatar">MJ</div>
+                                <div class="post-user-info">
+                                    <div class="post-username">Mike Johnson</div>
+                                    <div class="post-skill">Data Scientist</div>
+                                </div>
+                            </div>
+                            <div class="post-actions">
+                                <button class="post-action-btn">↗️</button>
+                                <button class="post-action-btn unsave">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <div class="post-image">📊</div>
+                            <div class="post-text">
+                                Step-by-step tutorial on creating interactive dashboards with Python and Plotly. Includes sample datasets and code snippets you can use in your projects.
+                            </div>
+                            <div class="post-tags">
+                                <span class="post-tag">#DataViz</span>
+                                <span class="post-tag">#Python</span>
+                                <span class="post-tag">#Dashboard</span>
+                            </div>
+                        </div>
+                        <div class="post-footer">
+                            <div class="post-date">
+                                <span>📅</span>
+                                <span>Saved 2 weeks ago</span>
+                            </div>
+                            <div class="post-collection">
+                                <span>📁</span>
+                                <span>Data Analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="saved-posts" id="tutorials-posts" style="display: none;">
+                    <!-- Tutorials posts would be displayed here -->
+                    <div class="empty-state">
+                        <div class="empty-icon">📚</div>
+                        <div class="empty-title">No Tutorials Saved Yet</div>
+                        <div class="empty-desc">When you save posts marked as tutorials, they will appear here for easy access.</div>
+                        <button class="explore-btn">Explore Tutorials</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Suggested Creators</div>
+                    <a href="#" class="see-all">See All</a>
+                </div>
+                
+                <div class="suggestion-card">
+                    <div class="suggestion-avatar">SR</div>
+                    <div class="suggestion-info">
+                        <div class="suggestion-name">Sarah Roberts</div>
+                        <div class="suggestion-skill">UI/UX Designer</div>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                
+                <div class="suggestion-card">
+                    <div class="suggestion-avatar">TP</div>
+                    <div class="suggestion-info">
+                        <div class="suggestion-name">Thomas Park</div>
+                        <div class="suggestion-skill">Full Stack Developer</div>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                
+                <div class="suggestion-card">
+                    <div class="suggestion-avatar">LW</div>
+                    <div class="suggestion-info">
+                        <div class="suggestion-name">Lisa Wang</div>
+                        <div class="suggestion-skill">Data Analyst</div>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Recently Viewed</div>
+                    <a href="#" class="see-all">Clear All</a>
+                </div>
+                
+                <div class="suggestion-card">
+                    <div class="suggestion-avatar">JD</div>
+                    <div class="suggestion-info">
+                        <div class="suggestion-name">Jane Doe</div>
+                        <div class="suggestion-skill">Mobile App Design Principles</div>
+                    </div>
+                </div>
+                
+                <div class="suggestion-card">
+                    <div class="suggestion-avatar">AS</div>
+                    <div class="suggestion-info">
+                        <div class="suggestion-name">Alex Smith</div>
+                        <div class="suggestion-skill">CSS Grid vs Flexbox</div>
+                    </div>
+                </div>
+                
+                <div class="suggestion-card">
+                    <div class="suggestion-avatar">MJ</div>
+                    <div class="suggestion-info">
+                        <div class="suggestion-name">Mike Johnson</div>
+                        <div class="suggestion-skill">Python Data Cleaning</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const postContainers = {
+                'all': document.getElementById('all-posts'),
+                'tutorials': document.getElementById('tutorials-posts')
+                // Add other tabs as needed
+            };
+            
+            // Filter buttons
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            
+            // Collection cards
+            const collectionCards = document.querySelectorAll('.collection-card');
+            
+            // Tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show corresponding posts container
+                    Object.keys(postContainers).forEach(key => {
+                        if (key === tabName) {
+                            postContainers[key].style.display = 'flex';
+                        } else {
+                            postContainers[key].style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Filter button functionality
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // In a real app, this would filter the posts
+                    console.log('Filtering by: ' + this.textContent);
+                });
+            });
+            
+            // Collection card selection
+            collectionCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    collectionCards.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // In a real app, this would filter posts by collection
+                    const collectionName = this.querySelector('.collection-name').textContent;
+                    console.log('Showing collection: ' + collectionName);
+                });
+            });
+            
+            // Create collection button
+            const createCollectionBtn = document.querySelector('.create-collection-btn');
+            createCollectionBtn.addEventListener('click', function() {
+                const collectionName = prompt('Enter a name for your new collection:');
+                if (collectionName) {
+                    // In a real app, this would create a new collection
+                    console.log('Creating collection: ' + collectionName);
+                    alert('Collection "' + collectionName + '" created successfully!');
+                }
+            });
+            
+            // Unsave post functionality
+            const unsaveButtons = document.querySelectorAll('.post-action-btn.unsave');
+            unsaveButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const post = this.closest('.saved-post');
+                    const postTitle = post.querySelector('.post-username').textContent;
+                    
+                    if (confirm('Are you sure you want to remove this post from your saved items?')) {
+                        post.style.opacity = '0';
+                        setTimeout(() => {
+                            post.remove();
+                            // Update saved count
+                            const savedCount = document.querySelector('.saved-count');
+                            const currentCount = parseInt(savedCount.textContent);
+                            savedCount.textContent = (currentCount - 1) + ' posts';
+                        }, 300);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

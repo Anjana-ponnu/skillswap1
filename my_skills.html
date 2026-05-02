@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Skills - SkillSwap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.5;
+        }
+
+        .header {
+            background-color: white;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 16px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-icon {
+            position: relative;
+            font-size: 20px;
+            text-decoration: none;
+            color: #64748b;
+            transition: color 0.2s;
+        }
+
+        .nav-icon:hover {
+            color: #3b82f6;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background-color: #ef4444;
+            border-radius: 50%;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .main-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 16px;
+            gap: 24px;
+        }
+
+        .sidebar {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .right-sidebar {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .see-all {
+            font-size: 14px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .skills-tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: #3b82f6;
+            border-bottom: 2px solid #3b82f6;
+        }
+
+        .tab:hover:not(.active) {
+            color: #64748b;
+            background-color: #f8fafc;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .skill-card {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .skill-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .skill-info {
+            flex: 1;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .skill-level {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .skill-progress {
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background-color: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #3b82f6;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .skill-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .skill-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .skill-btn {
+            flex: 1;
+            background: none;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .skill-btn.primary {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .skill-btn:hover {
+            background-color: #f1f5f9;
+        }
+
+        .skill-btn.primary:hover {
+            background-color: #2563eb;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        .empty-desc {
+            margin-bottom: 20px;
+        }
+
+        .explore-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .explore-btn:hover {
+            background-color: #2563eb;
+        }
+
+        .skill-category {
+            margin-bottom: 24px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .category-count {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #f8fafc;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        .badge-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #f59e0b;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .add-skill-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .add-skill-btn:hover {
+            background-color: #f1f5f9;
+        }
+
+        .add-icon {
+            font-size: 24px;
+            color: #64748b;
+        }
+
+        .add-text {
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .learning-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .stat-card {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 4px;
+        }
+
+        .stat-text {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar, .right-sidebar {
+                width: 100%;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-container">
+            <a href="{% url 'user_index' %}" class="logo">SkillSwap</a>
+            
+            <div class="nav-icons">
+                <a href="{% url 'user_index' %}" class="nav-icon">🏠</a>
+                <a href="#" class="nav-icon">➕</a>
+                <a href="#" class="nav-icon">🧭</a>
+                <a href="#" class="nav-icon">
+                    ❤️
+                    <span class="notification-dot"></span>
+                </a>
+                <a href="{% url 'user_profile' %}" class="nav-icon">👤</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Skills Summary</div>
+                </div>
+                <div class="learning-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">8</div>
+                        <div class="stat-text">Skills Mastered</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">12</div>
+                        <div class="stat-text">Skills Learning</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">4.7</div>
+                        <div class="stat-text">Avg. Rating</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">24</div>
+                        <div class="stat-text">Skill Badges</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Skill Categories</div>
+                </div>
+                <div class="skill-category">
+                    <div class="category-header">
+                        <div class="category-title">Design</div>
+                        <div class="category-count">4 skills</div>
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge">
+                            <div class="badge-icon">🎨</div>
+                            <span>UI/UX Design</span>
+                        </div>
+                        <div class="badge">
+                            <div class="badge-icon">✏️</div>
+                            <span>Graphic Design</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <div class="category-header">
+                        <div class="category-title">Development</div>
+                        <div class="category-count">6 skills</div>
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge">
+                            <div class="badge-icon">🌐</div>
+                            <span>Web Development</span>
+                        </div>
+                        <div class="badge">
+                            <div class="badge-icon">📱</div>
+                            <span>Mobile Development</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <div class="category-header">
+                        <div class="category-title">Business</div>
+                        <div class="category-count">3 skills</div>
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge">
+                            <div class="badge-icon">📊</div>
+                            <span>Data Analysis</span>
+                        </div>
+                        <div class="badge">
+                            <div class="badge-icon">💼</div>
+                            <span>Project Management</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">My Skills</div>
+                    <a href="#" class="see-all">Add New</a>
+                </div>
+                
+                <div class="skills-tabs">
+                    <div class="tab active" data-tab="mastered">Mastered (8)</div>
+                    <div class="tab" data-tab="learning">Learning (12)</div>
+                    <div class="tab" data-tab="interested">Interested (5)</div>
+                </div>
+                
+                <div class="skills-grid" id="mastered-skills">
+                    <div class="skill-card">
+                        <div class="skill-header">
+                            <div class="skill-icon">🎨</div>
+                            <div class="skill-info">
+                                <div class="skill-name">UI/UX Design</div>
+                                <div class="skill-level">Expert</div>
+                            </div>
+                        </div>
+                        <div class="skill-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-stats">
+                            <span>24 projects</span>
+                            <span>4.8 rating</span>
+                        </div>
+                        <div class="skill-actions">
+                            <button class="skill-btn">Share</button>
+                            <button class="skill-btn primary">Teach</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-card">
+                        <div class="skill-header">
+                            <div class="skill-icon">🌐</div>
+                            <div class="skill-info">
+                                <div class="skill-name">Web Development</div>
+                                <div class="skill-level">Advanced</div>
+                            </div>
+                        </div>
+                        <div class="skill-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-stats">
+                            <span>18 projects</span>
+                            <span>4.7 rating</span>
+                        </div>
+                        <div class="skill-actions">
+                            <button class="skill-btn">Share</button>
+                            <button class="skill-btn primary">Teach</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-card">
+                        <div class="skill-header">
+                            <div class="skill-icon">📝</div>
+                            <div class="skill-info">
+                                <div class="skill-name">Content Writing</div>
+                                <div class="skill-level">Expert</div>
+                            </div>
+                        </div>
+                        <div class="skill-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-stats">
+                            <span>42 articles</span>
+                            <span>4.9 rating</span>
+                        </div>
+                        <div class="skill-actions">
+                            <button class="skill-btn">Share</button>
+                            <button class="skill-btn primary">Teach</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-card">
+                        <div class="skill-header">
+                            <div class="skill-icon">📊</div>
+                            <div class="skill-info">
+                                <div class="skill-name">Data Analysis</div>
+                                <div class="skill-level">Advanced</div>
+                            </div>
+                        </div>
+                        <div class="skill-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-stats">
+                            <span>15 projects</span>
+                            <span>4.6 rating</span>
+                        </div>
+                        <div class="skill-actions">
+                            <button class="skill-btn">Share</button>
+                            <button class="skill-btn primary">Teach</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skills-grid" id="learning-skills" style="display: none;">
+                    <div class="skill-card">
+                        <div class="skill-header">
+                            <div class="skill-icon">📱</div>
+                            <div class="skill-info">
+                                <div class="skill-name">Mobile App Development</div>
+                                <div class="skill-level">Intermediate</div>
+                            </div>
+                        </div>
+                        <div class="skill-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-stats">
+                            <span>8/12 lessons</span>
+                            <span>In progress</span>
+                        </div>
+                        <div class="skill-actions">
+                            <button class="skill-btn">Resources</button>
+                            <button class="skill-btn primary">Continue</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-card">
+                        <div class="skill-header">
+                            <div class="skill-icon">🔒</div>
+                            <div class="skill-info">
+                                <div class="skill-name">Cybersecurity</div>
+                                <div class="skill-level">Beginner</div>
+                            </div>
+                        </div>
+                        <div class="skill-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 30%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-stats">
+                            <span>3/10 lessons</span>
+                            <span>In progress</span>
+                        </div>
+                        <div class="skill-actions">
+                            <button class="skill-btn">Resources</button>
+                            <button class="skill-btn primary">Continue</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skills-grid" id="interested-skills" style="display: none;">
+                    <div class="empty-state">
+                        <div class="empty-icon">🎯</div>
+                        <div class="empty-title">Skills You're Interested In</div>
+                        <div class="empty-desc">You haven't added any skills to your interest list yet.</div>
+                        <button class="explore-btn">Explore Skills</button>
+                    </div>
+                </div>
+                
+                <div class="add-skill-btn">
+                    <div class="add-icon">+</div>
+                    <div class="add-text">Add New Skill</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Skill Badges</div>
+                    <a href="#" class="see-all">View All</a>
+                </div>
+                
+                <div class="badge-container">
+                    <div class="badge">
+                        <div class="badge-icon" style="background-color: #f59e0b;">🏆</div>
+                        <span>UI/UX Expert</span>
+                    </div>
+                    
+                    <div class="badge">
+                        <div class="badge-icon" style="background-color: #10b981;">⭐</div>
+                        <span>Web Dev Master</span>
+                    </div>
+                    
+                    <div class="badge">
+                        <div class="badge-icon" style="background-color: #8b5cf6;">📝</div>
+                        <span>Content Creator</span>
+                    </div>
+                    
+                    <div class="badge">
+                        <div class="badge-icon" style="background-color: #ef4444;">📊</div>
+                        <span>Data Analyst</span>
+                    </div>
+                    
+                    <div class="badge">
+                        <div class="badge-icon" style="background-color: #3b82f6;">🔝</div>
+                        <span>Top Performer</span>
+                    </div>
+                    
+                    <div class="badge">
+                        <div class="badge-icon" style="background-color: #06b6d4;">👨‍🏫</div>
+                        <span>Skill Teacher</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Skill Recommendations</div>
+                    <a href="#" class="see-all">See All</a>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon">🤖</div>
+                        <div class="skill-info">
+                            <div class="skill-name">AI & Machine Learning</div>
+                            <div class="skill-level">Trending</div>
+                        </div>
+                    </div>
+                    <div class="skill-stats">
+                        <span>245 learners</span>
+                        <span>4.8 rating</span>
+                    </div>
+                    <div class="skill-actions">
+                        <button class="skill-btn">Learn More</button>
+                        <button class="skill-btn primary">Add to List</button>
+                    </div>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon">☁️</div>
+                        <div class="skill-info">
+                            <div class="skill-name">Cloud Computing</div>
+                            <div class="skill-level">High Demand</div>
+                        </div>
+                    </div>
+                    <div class="skill-stats">
+                        <span>189 learners</span>
+                        <span>4.6 rating</span>
+                    </div>
+                    <div class="skill-actions">
+                        <button class="skill-btn">Learn More</button>
+                        <button class="skill-btn primary">Add to List</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const skillGrids = {
+                'mastered': document.getElementById('mastered-skills'),
+                'learning': document.getElementById('learning-skills'),
+                'interested': document.getElementById('interested-skills')
+            };
+            
+            // Simple animation for progress bars
+            const progressBars = document.querySelectorAll('.progress-fill');
+            
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 300);
+            });
+            
+            // Tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show corresponding skills grid
+                    Object.keys(skillGrids).forEach(key => {
+                        if (key === tabName) {
+                            skillGrids[key].style.display = 'grid';
+                        } else {
+                            skillGrids[key].style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Add skill button functionality
+            const addSkillBtn = document.querySelector('.add-skill-btn');
+            addSkillBtn.addEventListener('click', function() {
+                alert('Redirecting to skill exploration page...');
+                // In a real app, this would redirect to a skill exploration page
+            });
+        });
+    </script>
+</body>
+</html>

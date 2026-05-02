@@ -1,0 +1,1052 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - SkillSwap</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.profile-container {
+    width: 100%;
+    max-width: 700px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.profile-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    position: relative;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Header Section */
+.profile-header {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-gradient {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    position: relative;
+}
+
+.header-gradient::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Avatar Section */
+.avatar-section {
+    display: flex;
+    justify-content: center;
+    margin-top: -60px;
+    position: relative;
+    z-index: 10;
+}
+
+.avatar-wrapper {
+    position: relative;
+}
+
+.avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 6px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.05);
+}
+
+.avatar-badge {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    border-radius: 50%;
+    border: 3px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.5);
+}
+
+/* Profile Info */
+.profile-info {
+    text-align: center;
+    padding: 24px 32px 16px;
+}
+
+.profile-name {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff5f7 100%);
+    border-radius: 16px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #737373;
+    font-weight: 500;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 30px;
+    background: linear-gradient(to bottom, transparent, #e5e7eb, transparent);
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff5f7 100%);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.contact-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.email-icon {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.phone-icon {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.contact-label {
+    font-size: 12px;
+    color: #737373;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.contact-value {
+    font-size: 15px;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+/* Skills Section */
+.skills-section {
+    padding: 24px 32px;
+}
+
+.section-header {
+    margin-bottom: 16px;
+}
+
+.section-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-icon {
+    font-size: 24px;
+}
+
+.skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.skill-tag {
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.skill-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.skill-offered {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.skill-needed {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+
+.skill-emoji {
+    font-size: 18px;
+}
+
+/* Action Buttons */
+.action-buttons {
+    padding: 24px 32px 32px;
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    flex: 1;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff5f7 100%);
+}
+
+/* Edit Form Container */
+.edit-form-container {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Form Header */
+.form-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    padding: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.form-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+.form-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    position: relative;
+    z-index: 1;
+}
+
+.close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+/* Form Content */
+.form-content {
+    padding: 32px;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff5f7 100%);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.form-input::placeholder {
+    color: #9ca3af;
+}
+
+/* Skills Input Section */
+.skill-input-wrapper {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.skill-input-wrapper .form-input {
+    flex: 1;
+}
+
+.btn-add-skill {
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: white;
+    flex-shrink: 0;
+}
+
+.btn-add-skill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-add-skill.offered {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.btn-add-skill.needed {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+/* Skill Tags in Edit Mode */
+.skill-tags-edit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.skill-tag-edit {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.skill-tag-edit.offered {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    color: #065f46;
+}
+
+.skill-tag-edit.needed {
+    background: linear-gradient(135deg, #fed7aa 0%, #fbbf24 100%);
+    color: #92400e;
+}
+
+.remove-skill-btn {
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.remove-skill-btn:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: rotate(90deg);
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 2px solid #f3f4f6;
+}
+
+.btn-cancel {
+    flex: 1;
+    padding: 14px 24px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    background: white;
+    color: #6b7280;
+}
+
+.btn-cancel:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-2px);
+}
+
+.btn-save {
+    flex: 1;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 10px;
+    }
+
+    .profile-header {
+        height: 140px;
+    }
+
+    .avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 40px;
+    }
+
+    .avatar-section {
+        margin-top: -50px;
+    }
+
+    .profile-name {
+        font-size: 28px;
+    }
+
+    .profile-stats {
+        gap: 12px;
+    }
+
+    .stat-number {
+        font-size: 20px;
+    }
+
+    .contact-section,
+    .skills-section,
+    .action-buttons {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .form-header {
+        padding: 24px;
+    }
+
+    .form-title {
+        font-size: 24px;
+    }
+
+    .form-content {
+        padding: 24px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-cancel,
+    .btn-save {
+        width: 100%;
+    }
+
+    .skill-input-wrapper {
+        flex-direction: column;
+    }
+
+    .btn-add-skill {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-name {
+        font-size: 24px;
+    }
+
+    .profile-stats {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .stat-divider {
+        display: none;
+    }
+
+    .contact-item {
+        padding: 12px;
+    }
+
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .form-header {
+        padding: 20px;
+    }
+
+    .form-title {
+        font-size: 20px;
+    }
+
+    .form-content {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <!-- PROFILE VIEW -->
+        <div id="profileView" class="profile-card">
+            <!-- Header Background -->
+            <div class="profile-header">
+                <div class="header-gradient"></div>
+            </div>
+
+            <!-- Profile Avatar -->
+            <div class="avatar-section">
+                <div class="avatar-wrapper">
+                    <div class="avatar">{{ user_initials }}</div>
+                    <div class="avatar-badge">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 0L12.2451 7.40983L20 9.65476L12.2451 11.8997L10 19.3095L7.75486 11.8997L0 9.65476L7.75486 7.40983L10 0Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="profile-info">
+                <h1 class="profile-name" id="displayName">{{ user.name }}</h1>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">42</span>
+                        <span class="stat-label">Connections</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="skillsCount">15</span>
+                        <span class="stat-label">Skills</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">Exchanges</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="contact-section">
+                <div class="contact-item">
+                    <div class="contact-icon email-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div class="contact-details">
+                        <span class="contact-label">Email</span>
+                        <span class="contact-value" id="displayEmail">{{ user.email }}</span>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon phone-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+                        </svg>
+                    </div>
+                    <div class="contact-details">
+                        <span class="contact-label">Phone</span>
+                        <span class="contact-value" id="displayPhone">{{ user.phone_no }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Offered Section -->
+            <div class="skills-section">
+                <div class="section-header">
+                    <h2>
+                        <span class="section-icon">🎯</span>
+                        Skills Offered
+                    </h2>
+                </div>
+                <div class="skills-grid" id="skillsOfferedList">
+                    <div class="skill-tag skill-offered">
+                        <span class="skill-emoji">👨‍🍳</span>
+                        Cooking
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Needed Section -->
+            <div class="skills-section">
+                <div class="section-header">
+                    <h2>
+                        <span class="section-icon">🌟</span>
+                        Skills Needed
+                    </h2>
+                </div>
+                <div class="skills-grid" id="skillsNeededList">
+                    <div class="skill-tag skill-needed">
+                        <span class="skill-emoji">📸</span>
+                        Photography
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="showEditForm()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Edit Profile
+                </button>
+
+                <button class="btn btn-primary" onclick="window.location.href='{% url 'user_index' %}'">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Dashboard
+                </button>
+            </div>
+        </div>
+
+        <!-- EDIT FORM -->
+        <div id="editForm" class="edit-form-container hidden">
+            <div class="form-header">
+                <h2 class="form-title">Edit Profile</h2>
+                <button class="close-btn" onclick="cancelEdit()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="form-content">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input type="text" id="editName" class="form-input" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="editEmail" class="form-input" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" id="editPhone" class="form-input" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Skills Offered</label>
+                    <div class="skill-input-wrapper">
+                        <input type="text" id="newSkillOffered" class="form-input" placeholder="Add a skill you can teach" />
+                        <button class="btn-add-skill offered" onclick="addSkillOffered()">+</button>
+                    </div>
+                    <div class="skill-tags-edit" id="editSkillsOffered"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Skills Needed</label>
+                    <div class="skill-input-wrapper">
+                        <input type="text" id="newSkillNeeded" class="form-input" placeholder="Add a skill you want to learn" />
+                        <button class="btn-add-skill needed" onclick="addSkillNeeded()">+</button>
+                    </div>
+                    <div class="skill-tags-edit" id="editSkillsNeeded"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-cancel" onclick="cancelEdit()">Cancel</button>
+                    <button class="btn-save" onclick="saveProfile()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Profile data
+        let profile = {
+            name: '{{ user.name }}',
+            email: '{{ user.email }}',
+            phone: '{{ user.phone_no }}',
+            skillsOffered: ['Cooking'],
+            skillsNeeded: ['Photography']
+        };
+
+        let tempProfile = { ...profile, skillsOffered: [...profile.skillsOffered], skillsNeeded: [...profile.skillsNeeded] };
+
+        function showEditForm() {
+            // Copy current profile to temp
+            tempProfile = {
+                name: profile.name,
+                email: profile.email,
+                phone: profile.phone,
+                skillsOffered: [...profile.skillsOffered],
+                skillsNeeded: [...profile.skillsNeeded]
+            };
+
+            // Populate form fields
+            document.getElementById('editName').value = tempProfile.name;
+            document.getElementById('editEmail').value = tempProfile.email;
+            document.getElementById('editPhone').value = tempProfile.phone;
+
+            // Render skills
+            renderEditSkills();
+
+            // Show form, hide profile
+            document.getElementById('profileView').classList.add('hidden');
+            document.getElementById('editForm').classList.remove('hidden');
+        }
+
+        function cancelEdit() {
+            document.getElementById('profileView').classList.remove('hidden');
+            document.getElementById('editForm').classList.add('hidden');
+        }
+
+        function saveProfile() {
+            // Get form values
+            profile.name = document.getElementById('editName').value;
+            profile.email = document.getElementById('editEmail').value;
+            profile.phone = document.getElementById('editPhone').value;
+            profile.skillsOffered = [...tempProfile.skillsOffered];
+            profile.skillsNeeded = [...tempProfile.skillsNeeded];
+
+            // Update display
+            updateProfileDisplay();
+
+            // Hide form, show profile
+            cancelEdit();
+        }
+
+        function updateProfileDisplay() {
+            document.getElementById('displayName').textContent = profile.name;
+            document.getElementById('displayEmail').textContent = profile.email;
+            document.getElementById('displayPhone').textContent = profile.phone;
+
+            // Update skills offered
+            const skillsOfferedList = document.getElementById('skillsOfferedList');
+            skillsOfferedList.innerHTML = '';
+            profile.skillsOffered.forEach(skill => {
+                const tag = document.createElement('div');
+                tag.className = 'skill-tag skill-offered';
+                tag.innerHTML = '<span class="skill-emoji">👨‍🍳</span>' + skill;
+                skillsOfferedList.appendChild(tag);
+            });
+
+            // Update skills needed
+            const skillsNeededList = document.getElementById('skillsNeededList');
+            skillsNeededList.innerHTML = '';
+            profile.skillsNeeded.forEach(skill => {
+                const tag = document.createElement('div');
+                tag.className = 'skill-tag skill-needed';
+                tag.innerHTML = '<span class="skill-emoji">📸</span>' + skill;
+                skillsNeededList.appendChild(tag);
+            });
+
+            // Update skills count
+            document.getElementById('skillsCount').textContent = profile.skillsOffered.length + profile.skillsNeeded.length;
+        }
+
+        function renderEditSkills() {
+            // Render skills offered
+            const offeredContainer = document.getElementById('editSkillsOffered');
+            offeredContainer.innerHTML = '';
+            tempProfile.skillsOffered.forEach((skill, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'skill-tag-edit offered';
+                tag.innerHTML = `
+                    ${skill}
+                    <button class="remove-skill-btn" onclick="removeSkillOffered(${index})">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                `;
+                offeredContainer.appendChild(tag);
+            });
+
+            // Render skills needed
+            const neededContainer = document.getElementById('editSkillsNeeded');
+            neededContainer.innerHTML = '';
+            tempProfile.skillsNeeded.forEach((skill, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'skill-tag-edit needed';
+                tag.innerHTML = `
+                    ${skill}
+                    <button class="remove-skill-btn" onclick="removeSkillNeeded(${index})">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                `;
+                neededContainer.appendChild(tag);
+            });
+        }
+
+        function addSkillOffered() {
+            const input = document.getElementById('newSkillOffered');
+            const skill = input.value.trim();
+            if (skill) {
+                tempProfile.skillsOffered.push(skill);
+                input.value = '';
+                renderEditSkills();
+            }
+        }
+
+        function addSkillNeeded() {
+            const input = document.getElementById('newSkillNeeded');
+            const skill = input.value.trim();
+            if (skill) {
+                tempProfile.skillsNeeded.push(skill);
+                input.value = '';
+                renderEditSkills();
+            }
+        }
+
+        function removeSkillOffered(index) {
+            tempProfile.skillsOffered.splice(index, 1);
+            renderEditSkills();
+        }
+
+        function removeSkillNeeded(index) {
+            tempProfile.skillsNeeded.splice(index, 1);
+            renderEditSkills();
+        }
+
+        // Allow Enter key to add skills
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('newSkillOffered').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addSkillOffered();
+                }
+            });
+
+            document.getElementById('newSkillNeeded').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addSkillNeeded();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post - SkillSwap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.5;
+        }
+
+        .header {
+            background-color: white;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 16px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-icon {
+            position: relative;
+            font-size: 20px;
+            text-decoration: none;
+            color: #64748b;
+            transition: color 0.2s;
+        }
+
+        .nav-icon:hover {
+            color: #3b82f6;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .create-post-card {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 24px;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .card-body {
+            padding: 32px;
+        }
+
+        .post-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background-color: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .user-avatar-large {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .user-details h3 {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #1e293b;
+        }
+
+        .user-details p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 16px;
+        }
+
+        .form-textarea {
+            width: 100%;
+            min-height: 160px;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            line-height: 1.6;
+            resize: vertical;
+            transition: all 0.3s ease;
+            background-color: #fafafa;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .char-counter.warning {
+            color: #f59e0b;
+        }
+
+        .char-counter.error {
+            color: #ef4444;
+        }
+
+        .image-upload-section {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: #fafafa;
+        }
+
+        .image-upload-section:hover {
+            border-color: #3b82f6;
+            background-color: #f0f9ff;
+        }
+
+        .image-upload-section.dragover {
+            border-color: #3b82f6;
+            background-color: #dbeafe;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #9ca3af;
+        }
+
+        .upload-text {
+            margin-bottom: 16px;
+        }
+
+        .upload-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .upload-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .browse-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .browse-btn:hover {
+            background-color: #2563eb;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .image-preview {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .preview-container {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.2s;
+        }
+
+        .remove-image:hover {
+            background-color: #dc2626;
+        }
+
+        .skills-section {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .skills-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #374151;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .skill-tag {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .skill-tag:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .skill-tag.selected {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            padding-top: 24px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-cancel {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-cancel:hover {
+            background-color: #e5e7eb;
+        }
+
+        .btn-submit {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-submit:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .privacy-settings {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background-color: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .privacy-icon {
+            font-size: 20px;
+            color: #6b7280;
+        }
+
+        .privacy-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background-color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .privacy-info {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #10b981;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px 16px;
+            }
+            
+            .card-body {
+                padding: 24px 20px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-container">
+            <a href="{% url 'user_index' %}" class="logo">SkillSwap</a>
+            <div class="nav-icons">
+                <a href="{% url 'user_index' %}" class="nav-icon">🏠</a>
+                <a href="#" class="nav-icon">➕</a>
+                <a href="#" class="nav-icon">🧭</a>
+                <a href="{% url 'user_profile' %}" class="nav-icon">👤</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="create-post-card">
+            <div class="card-header">
+                <h1 class="card-title">Create a Post</h1>
+                <p class="card-subtitle">Share your knowledge, ask questions, or showcase your work</p>
+            </div>
+            
+            <div class="card-body">
+                <form class="post-form" id="createPostForm" method="post" action="{% url 'create_post' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- User Info -->
+                    <div class="user-info">
+                        <div class="user-avatar-large">JD</div>
+                        <div class="user-details">
+                            <h3>John Doe</h3>
+                            <p>UI/UX Designer</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Post Content -->
+                    <div class="form-group">
+                        <label class="form-label" for="postContent">What would you like to share?</label>
+                        <textarea 
+                            id="postContent" 
+                            name="content" 
+                            class="form-textarea" 
+                            placeholder="Share your knowledge, ask a question, or showcase your work..."
+                            maxlength="1000"
+                            required
+                        ></textarea>
+                        <div class="char-counter" id="charCounter">0/1000</div>
+                    </div>
+                    
+                    <!-- Image Upload -->
+                    <div class="form-group">
+                        <label class="form-label">Add an image (optional)</label>
+                        <div class="image-upload-section" id="imageUploadArea">
+                            <div class="upload-icon">📷</div>
+                            <div class="upload-text">
+                                <div class="upload-title">Drag & drop an image</div>
+                                <div class="upload-subtitle">or click to browse files</div>
+                            </div>
+                            <button type="button" class="browse-btn" onclick="document.getElementById('imageInput').click()">
+                                Browse Files
+                            </button>
+                            <input type="file" id="imageInput" name="image" class="file-input" accept="image/*">
+                        </div>
+                        <div class="image-preview" id="imagePreview">
+                            <div class="preview-container">
+                                <img class="preview-image" id="previewImg" src="" alt="Preview">
+                                <button type="button" class="remove-image" onclick="removeImage()">×</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Skills Tagging -->
+                    <div class="skills-section">
+                        <div class="skills-title">Tag relevant skills</div>
+                        <div class="skills-grid" id="skillsContainer">
+                            <div class="skill-tag" data-skill="ui-ux">UI/UX Design</div>
+                            <div class="skill-tag" data-skill="web-dev">Web Development</div>
+                            <div class="skill-tag" data-skill="mobile-dev">Mobile Development</div>
+                            <div class="skill-tag" data-skill="data-science">Data Science</div>
+                            <div class="skill-tag" data-skill="graphic-design">Graphic Design</div>
+                            <div class="skill-tag" data-skill="content-writing">Content Writing</div>
+                            <div class="skill-tag" data-skill="digital-marketing">Digital Marketing</div>
+                            <div class="skill-tag" data-skill="project-management">Project Management</div>
+                        </div>
+                        <input type="hidden" name="skills" id="selectedSkills">
+                    </div>
+                    
+                    <!-- Privacy Settings -->
+                    <div class="privacy-settings">
+                        <div class="privacy-icon">🌐</div>
+                        <select name="privacy" class="privacy-select">
+                            <option value="public">Public</option>
+                            <option value="followers">Followers Only</option>
+                            <option value="private">Only Me</option>
+                        </select>
+                        <div class="privacy-info">Who can see this post</div>
+                    </div>
+                    
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel" onclick="window.history.back()">Cancel</button>
+                        <button type="submit" class="btn btn-submit" id="submitBtn">Publish Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        ✅ Post published successfully!
+    </div>
+
+    <script>
+        // Character counter
+        const textarea = document.getElementById('postContent');
+        const charCounter = document.getElementById('charCounter');
+        
+        textarea.addEventListener('input', function() {
+            const length = this.value.length;
+            charCounter.textContent = `${length}/1000`;
+            
+            if (length > 900) {
+                charCounter.classList.add('warning');
+            } else {
+                charCounter.classList.remove('warning');
+            }
+            
+            if (length > 1000) {
+                charCounter.classList.add('error');
+            } else {
+                charCounter.classList.remove('error');
+            }
+        });
+
+        // Image upload functionality
+        const imageUploadArea = document.getElementById('imageUploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+
+        // Drag and drop functionality
+        imageUploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        imageUploadArea.addEventListener('dragleave', function() {
+            this.classList.remove('dragover');
+        });
+
+        imageUploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleImageFile(files[0]);
+            }
+        });
+
+        imageUploadArea.addEventListener('click', function() {
+            imageInput.click();
+        });
+
+        imageInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                handleImageFile(this.files[0]);
+            }
+        });
+
+        function handleImageFile(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please select a valid image file.');
+            }
+        }
+
+        function removeImage() {
+            imagePreview.style.display = 'none';
+            previewImg.src = '';
+            imageInput.value = '';
+        }
+
+        // Skills selection
+        const skillTags = document.querySelectorAll('.skill-tag');
+        const selectedSkillsInput = document.getElementById('selectedSkills');
+        let selectedSkills = [];
+
+        skillTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                const skill = this.getAttribute('data-skill');
+                
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    selectedSkills = selectedSkills.filter(s => s !== skill);
+                } else {
+                    this.classList.add('selected');
+                    selectedSkills.push(skill);
+                }
+                
+                selectedSkillsInput.value = selectedSkills.join(',');
+            });
+        });
+
+        // Form submission
+        document.getElementById('createPostForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const content = document.getElementById('postContent').value.trim();
+            if (!content) {
+                alert('Please enter some content for your post.');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            // Simulate API call
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                
+                // Redirect after success
+                setTimeout(() => {
+                    window.location.href = "{% url 'user_index' %}";
+                }, 1500);
+            }, 2000);
+            
+            // In a real application, you would submit the form normally
+            // this.submit();
+        });
+
+        // Enable/disable submit button based on content
+        textarea.addEventListener('input', function() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = this.value.trim().length === 0;
+        });
+
+        // Initialize submit button state
+        document.getElementById('submitBtn').disabled = true;
+    </script>
+</body>
+</html>
