@@ -1,0 +1,212 @@
+{% extends "admin_base.html" %}
+{% load static %}
+
+{% block title %}Reviews - SkillSwap{% endblock %}
+
+{% block content %}
+<style>
+  .reviews-container {
+    padding: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+  }
+
+  .reviews-header {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .reviews-header h1 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .reviews-header p {
+    color: #6b7280;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .reviews-table-wrapper {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+  }
+
+  .table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .table thead th {
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    padding: 1.25rem 1rem;
+    text-align: left;
+    border: none;
+  }
+
+  .table thead th:first-child {
+    border-top-left-radius: 12px;
+  }
+
+  .table thead th:last-child {
+    border-top-right-radius: 12px;
+  }
+
+  .table tbody tr {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .table tbody tr:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    transform: translateX(5px);
+  }
+
+  .table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .table tbody td {
+    padding: 1.25rem 1rem;
+    color: #374151;
+    font-size: 0.95rem;
+    border: none;
+  }
+
+  .table tbody td:nth-child(1) {
+    font-weight: 600;
+    color: #667eea;
+  }
+
+  .rating-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+    padding: 0.375rem 0.875rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+  }
+
+  .reviewer-name {
+    font-weight: 600;
+    color: #1f2937;
+  }
+
+  .skill-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+    color: white;
+    padding: 0.375rem 0.875rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .comment-text {
+    color: #6b7280;
+    max-width: 300px;
+    line-height: 1.5;
+  }
+
+  .date-text {
+    color: #9ca3af;
+    font-size: 0.875rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #9ca3af;
+  }
+
+  .empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  .empty-state-text {
+    font-size: 1.25rem;
+    color: #6b7280;
+  }
+
+  @media (max-width: 768px) {
+    .reviews-container {
+      padding: 1rem;
+    }
+
+    .table {
+      font-size: 0.875rem;
+    }
+
+    .table thead th,
+    .table tbody td {
+      padding: 0.75rem 0.5rem;
+    }
+  }
+</style>
+
+<div class="reviews-container">
+  <div class="reviews-header">
+    <h1>Reviews</h1>
+    <p>All user feedback and ratings</p>
+  </div>
+
+  <div class="reviews-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Reviewer</th>
+          <th>Skill</th>
+          <th>Rating</th>
+          <th>Comment</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for review in reviews %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td><span class="reviewer-name">{{ review.reviewer_name }}</span></td>
+          <td><span class="skill-tag">{{ review.skill_name }}</span></td>
+          <td><span class="rating-badge">⭐ {{ review.rating }}/5</span></td>
+          <td><span class="comment-text">{{ review.comment|default:"-" }}</span></td>
+          <td><span class="date-text">{{ review.date_submitted|date:"Y-m-d H:i" }}</span></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="empty-state">
+            <div class="empty-state-icon">⭐</div>
+            <div class="empty-state-text">No reviews yet.</div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,599 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}SkillSwap Admin{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  {% block extra_css %}{% endblock %}
+  <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .sidebar {
+            width: 220px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: linear-gradient(180deg, #b57bee, #8e44ad);
+  color: #fff;
+  padding-top: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 24px;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            flex: 1;
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 4px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 24px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.2s, color 0.2s;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: white;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .logout {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            padding-top: 12px;
+        }
+
+        
+       * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin-left: 250px; /* same as sidebar width */
+            padding: 20px;
+            flex: 1;
+}
+        
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+        }
+
+        .card.blue::before {
+            background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+        }
+
+        .card.green::before {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+        }
+
+        .card.purple::before {
+            background: linear-gradient(90deg, #8b5cf6 0%, #ec4899 100%);
+        }
+
+        .card.orange::before {
+            background: linear-gradient(90deg, #f97316 0%, #ef4444 100%);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .icon-wrapper {
+            padding: 1rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .icon-wrapper {
+            transform: scale(1.1);
+        }
+
+        .icon-wrapper.blue {
+            background: #dbeafe;
+        }
+
+        .icon-wrapper.green {
+            background: #d1fae5;
+        }
+
+        .icon-wrapper.purple {
+            background: #f3e8ff;
+        }
+
+        .icon-wrapper.orange {
+            background: #fed7aa;
+        }
+
+        .icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .icon.blue { color: #2563eb; }
+        .icon.green { color: #059669; }
+        .icon.purple { color: #7c3aed; }
+        .icon.orange { color: #ea580c; }
+
+        .change-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .card-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            color: #6b7280;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-progress {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+
+        .card-progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            width: 0;
+            transition: width 1s ease;
+        }
+
+        .card:hover .card-progress-bar {
+            width: 100% !important;
+        }
+
+        .card.blue .card-progress-bar {
+            background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+        }
+
+        .card.green .card-progress-bar {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+        }
+
+        .card.purple .card-progress-bar {
+            background: linear-gradient(90deg, #8b5cf6 0%, #ec4899 100%);
+        }
+
+        .card.orange .card-progress-bar {
+            background: linear-gradient(90deg, #f97316 0%, #ef4444 100%);
+        }
+
+        .decorative-circle {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            opacity: 0.1;
+            bottom: -50px;
+            right: -50px;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .decorative-circle {
+            transform: scale(1.5);
+        }
+
+        .card.blue .decorative-circle {
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+        }
+
+        .card.green .decorative-circle {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+
+        .card.purple .decorative-circle {
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        }
+
+        .card.orange .decorative-circle {
+            background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .featured-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .featured-card .featured-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .featured-icon {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 15px;
+        }
+
+        .featured-badge {
+            margin-left: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .featured-value {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .featured-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .featured-subtitle {
+            opacity: 0.7;
+            font-size: 0.875rem;
+        }
+
+        .achievement-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .achievement-icon {
+            background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
+            padding: 1rem;
+            border-radius: 15px;
+        }
+
+        .achievement-info {
+            margin-left: 1rem;
+        }
+
+        .achievement-info h3 {
+            font-size: 1.5rem;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .achievement-info p {
+            color: #6b7280;
+        }
+
+        .progress-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .progress-label {
+            color: #6b7280;
+        }
+
+        .progress-value {
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .progress-bar-wrapper {
+            width: 100%;
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fbbf24 0%, #f97316 100%);
+            border-radius: 10px;
+            width: 0;
+            animation: fillProgress 2s ease forwards;
+        }
+               
+
+
+
+        /* Main content */
+.main-content {
+  margin-left: 220px; /* matches sidebar width */
+  padding: 30px;
+  background: #f6f8fb;
+  min-height: 100vh;
+}
+
+/* Remove unwanted gap or shadow */
+body {
+  margin: 0;
+  padding: 0;
+  background: #f6f8fb;
+}
+
+/* Dashboard cards */
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+        @keyframes fillProgress {
+            to {
+                width: 98%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .card-value {
+                font-size: 2.5rem;
+            }
+
+            .featured-value {
+                font-size: 3rem;
+            }
+        }
+    </style>
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+<nav class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M7 16V4M7 4L3 8M7 4L11 8M17 8V20M17 20L21 16M17 20L13 16"/>
+                </svg>
+            </div>
+            <span class="logo-text">SkillSwap</span>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="{% url 'admin_index' %}" class="nav-link">
+                    <span class="nav-icon">🌐</span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin_users' %}" class="nav-link ">
+                    <span class="nav-icon">👥</span>
+                    <span>Users</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin_skills' %}" class="nav-link">
+                    <span class="nav-icon">🎓</span>
+                    <span>Skills</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin_sessions' %}" class="nav-link">
+                    <span class="nav-icon">📅</span>
+                    <span>Sessions</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin_reviews' %}" class="nav-link">
+                    <span class="nav-icon">⭐</span>
+                    <span>Reviews</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin_analytics' %}" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    <span>Analytics</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin_settings' %}" class="nav-link">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+
+        <ul class="nav-menu logout">
+            <li class="nav-item">
+                <a href="{% url 'logout' %}" class="nav-link">
+                    <span class="nav-icon">🚪</span>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </nav
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Scripts -->
+  <script src="{% static 'js/admin.js' %}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

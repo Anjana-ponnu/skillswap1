@@ -1,0 +1,210 @@
+{% extends "admin_base.html" %}
+{% block title %}Admin - Sessions Overview{% endblock %}
+
+{% block content %}
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Sessions Overview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #b794f6 0%, #9333ea 100%);
+      color: #333;
+      margin: 0;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1400px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: #1e293b;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 20px;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+      text-align: left;
+      padding: 16px 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+
+    th:nth-child(1) { background: rgba(147, 51, 234, 0.95); }
+    th:nth-child(2) { background: rgba(147, 51, 234, 0.9); }
+    th:nth-child(3) { background: rgba(147, 51, 234, 0.85); }
+    th:nth-child(4) { background: rgba(147, 51, 234, 0.8); }
+    th:nth-child(5) { background: rgba(147, 51, 234, 0.75); }
+
+    th:first-child {
+      border-top-left-radius: 12px;
+    }
+
+    th:last-child {
+      border-top-right-radius: 12px;
+    }
+
+    tbody tr {
+      transition: all 0.2s ease;
+      background: white;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f9fafb;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: #f3e8ff;
+      transform: translateX(4px);
+    }
+
+    td {
+      color: #475569;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    td:first-child {
+      font-weight: 700;
+      color: #9333ea;
+      font-size: 1rem;
+    }
+
+    td:nth-child(2) {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .status {
+      padding: 6px 14px;
+      border-radius: 16px;
+      color: black;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-block;
+      text-transform: capitalize;
+    }
+
+    .status.active { 
+      background: #10b981;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+    
+    .status.completed { 
+      background: #6366f1;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    }
+    
+    .status.cancelled { 
+      background: #ef4444;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    }
+
+    /* Empty state */
+    tbody tr td[colspan="5"] {
+      text-align: center;
+      color: #94a3b8;
+      font-style: italic;
+      padding: 50px 20px;
+      font-size: 1rem;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      th, td {
+        padding: 12px 14px;
+        font-size: 0.85rem;
+      }
+
+      .status {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+      }
+
+      .container {
+        padding: 25px;
+      }
+
+      tbody tr:hover {
+        transform: none;
+      }
+    }
+
+    /* Scroll behavior for mobile */
+    @media (max-width: 992px) {
+      .container {
+        overflow-x: auto;
+      }
+      
+      table {
+        min-width: 600px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>SkillSwap Sessions Overview</h1>
+    <table>
+      <tr>
+        <th>Session ID</th>
+        <th>Mentor</th>
+        <th>Skill</th>
+        <th>Date</th>
+        <th>Status</th>
+      </tr>
+      {% for session in sessions %}
+      <tr>
+        <td>{{ session.id }}</td>
+        <td>{{ session.mentor }}</td>
+        <td>{{ session.skill }}</td>
+        <td>{{ session.date }}</td>
+        <td><span class="status {{ session.status|lower }}">{{ session.status }}</span></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5">No sessions found.</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</body>
+</html>
+{% endblock %}

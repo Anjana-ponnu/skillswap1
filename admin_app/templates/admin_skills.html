@@ -1,0 +1,324 @@
+{% extends "admin_base.html" %}
+{% block title %}Skills - SkillSwap{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Skills Overview</h2>
+  <p>Dynamic list of all skills offered and needed by users</p>
+</div>
+
+<table class="skills-table">
+  <thead>
+    <tr>
+      <th>Skill</th>
+      <th>Offered By (Count)</th>
+      <th>Needed By (Count)</th>
+      <th>ACTIONS</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for skill in skills %}
+    <tr>
+      <td>{{ skill.name }}</td>
+      <td>
+        {{ skill.offered_count }}
+        {% if skill.offered_by %}
+          <br><small>{{ skill.offered_by|join:", " }}</small>
+        {% endif %}
+      </td>
+      <td>
+        {{ skill.needed_count }}
+        {% if skill.needed_by %}
+          <br><small>{{ skill.needed_by|join:", " }}</small>
+        {% endif %}
+      </td>
+      <td>
+                <a href="{% url 'edit_skill' skill %}" class="btn-edit">Edit</a>
+                <a href="{% url 'delete_skill' skill %}" class="btn-delete"
+                   onclick="return confirm('Are you sure you want to delete this skill?');">Delete</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="3">No skills found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+  body {
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6366f1 100%);
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      padding: 40px 20px;
+  }
+
+  .page-header {
+      text-align: center;
+      margin-bottom: 50px;
+      animation: fadeInDown 0.8s ease;
+  }
+
+  .page-header h2 {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 25%, #ec4899 50%, #a855f7 75%, #6366f1 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% 200%;
+      animation: fadeInDown 0.8s ease, gradientShift 5s ease infinite;
+      margin-bottom: 12px;
+      text-shadow: none;
+      letter-spacing: -0.5px;
+      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+  }
+
+  .page-header p {
+      color: #fff3cd;
+      font-size: 1.1rem;
+      font-weight: 500;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      display: inline-block;
+      padding: 8px 24px;
+      border-radius: 30px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .skills-table {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 0.8s ease;
+  }
+
+  .skills-table th,
+  .skills-table td {
+      padding: 20px 24px;
+      text-align: left;
+  }
+
+  .skills-table thead {
+      background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 25%, #7c3aed 50%, #6366f1 75%, #818cf8 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 8s ease infinite;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+  }
+
+  .skills-table thead::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      pointer-events: none;
+  }
+
+  .skills-table thead::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #a855f7, #8b5cf6, #6366f1, #818cf8, #a855f7);
+      box-shadow: 0 2px 10px rgba(168, 85, 247, 0.6);
+  }
+
+  .skills-table th {
+      color: #ffffff;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 1.5px;
+      border: none;
+      position: relative;
+      padding: 28px 24px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .skills-table th:nth-child(1) {
+      background: rgba(168, 85, 247, 0.2);
+  }
+
+  .skills-table th:nth-child(2) {
+      background: rgba(139, 92, 246, 0.2);
+  }
+
+  .skills-table th:nth-child(3) {
+      background: rgba(99, 102, 241, 0.2);
+  }
+
+  @keyframes gradientShift {
+      0% {
+          background-position: 0% 50%;
+      }
+      50% {
+          background-position: 100% 50%;
+      }
+      100% {
+          background-position: 0% 50%;
+      }
+  }
+
+  .skills-table tbody tr {
+      border-bottom: 1px solid #e5e7eb;
+      transition: all 0.3s ease;
+  }
+
+  .skills-table tbody tr:last-child {
+      border-bottom: none;
+  }
+
+  .skills-table tbody tr:hover {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%);
+      transform: scale(1.01);
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15);
+  }
+
+  .skills-table td:first-child {
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 1.05rem;
+  }
+
+  .skills-table td {
+      color: #475569;
+      font-size: 1rem;
+      position: relative;
+  }
+
+  small {
+      display: inline-block;
+      margin-top: 6px;
+      color: #64748b;
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.5;
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border-left: 3px solid #8b5cf6;
+  }
+
+  .skills-table tbody tr td:nth-child(2) small {
+      border-left-color: #10b981;
+      background: #ecfdf5;
+  }
+
+  .skills-table tbody tr td:nth-child(3) small {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+  }
+
+  /* Count badges */
+  .skills-table td:not(:first-child) {
+      font-weight: 600;
+      font-size: 1.1rem;
+  }
+
+  /* Empty state */
+  .skills-table tbody tr td[colspan="3"] {
+      text-align: center;
+      color: #94a3b8;
+      font-style: italic;
+      padding: 60px 24px;
+      font-size: 1.1rem;
+  }
+
+  /* Animations */
+  @keyframes fadeInDown {
+      from {
+          opacity: 0;
+          transform: translateY(-30px);
+      }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+
+  @keyframes fadeInUp {
+      from {
+          opacity: 0;
+          transform: translateY(30px);
+      }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+      .page-header h2 {
+          font-size: 2rem;
+      }
+
+      .skills-table th,
+      .skills-table td {
+          padding: 14px 16px;
+          font-size: 0.9rem;
+      }
+
+      .skills-table td:first-child {
+          font-size: 0.95rem;
+      }
+
+      small {
+          font-size: 0.8rem;
+      }
+  }
+
+  /* Scroll behavior */
+  @media (max-width: 992px) {
+      .skills-table {
+          display: block;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+      }
+  }
+  .btn-edit, .btn-delete {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    text-decoration: none;
+    color: #fff;
+}
+.btn-edit { background: #6c63ff; }
+.btn-delete { background: #ff4b4b; }
+.btn-edit:hover { background: #5548e5; }
+.btn-delete:hover { background: #e03e3e; }
+.tag-offered {
+    background: #d5f6ec;
+    color: #218c74;
+    border-radius: 6px;
+    padding: 3px 6px;
+    margin-left: 5px;
+}
+.tag-needed {
+    background: #ffe9c0;
+    color: #b16a00;
+    border-radius: 6px;
+    padding: 3px 6px;
+    margin-left: 5px;
+}
+</style>
+{% endblock %}

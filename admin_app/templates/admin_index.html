@@ -1,0 +1,479 @@
+{% extends "admin_base.html" %}
+{% load static %}
+
+{% block title %}Dashboard - SkillSwap{% endblock %}
+
+{% block content %}
+<style>
+  .container {
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 50%, #fef3f2 100%);
+    min-height: 100vh;
+  }
+
+  .header {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+
+  .header p {
+    color: #6b7280;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .icon-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .icon-wrapper.blue {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .icon-wrapper.green {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  }
+
+  .icon-wrapper.purple {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  }
+
+  .icon-wrapper.orange {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  }
+
+  .icon {
+    width: 28px;
+    height: 28px;
+    color: white;
+  }
+
+  .change-badge {
+    background: #dcfce7;
+    color: #16a34a;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .card-value {
+    font-size: 40px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .card-title {
+    color: #6b7280;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+  }
+
+  .card-progress {
+    width: 100%;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+  }
+
+  .card-progress-bar {
+    height: 100%;
+    border-radius: 10px;
+    animation: progressAnimation 2s ease-out;
+  }
+
+  .card.blue .card-progress-bar {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    width: 75%;
+  }
+
+  .card.green .card-progress-bar {
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    width: 85%;
+  }
+
+  .card.purple .card-progress-bar {
+    background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
+    width: 65%;
+  }
+
+  .card.orange .card-progress-bar {
+    background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+    width: 90%;
+  }
+
+  .decorative-circle {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    bottom: -100px;
+    right: -50px;
+    opacity: 0.08;
+    z-index: 1;
+  }
+
+  .card.blue .decorative-circle {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .card.green .decorative-circle {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  }
+
+  .card.purple .decorative-circle {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  }
+
+  .card.orange .decorative-circle {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+  }
+
+  .featured-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 40px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+  }
+
+  .featured-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .featured-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+  }
+
+  .featured-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+  }
+
+  .featured-value {
+    font-size: 56px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .featured-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    opacity: 0.95;
+  }
+
+  .featured-subtitle {
+    font-size: 14px;
+    opacity: 0.85;
+  }
+
+  .achievement-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .achievement-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .achievement-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .achievement-info h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 4px;
+  }
+
+  .achievement-info p {
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .progress-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .progress-label {
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .progress-value {
+    color: #1f2937;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .progress-bar-wrapper {
+    width: 100%;
+    height: 12px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 98%;
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    border-radius: 10px;
+    animation: progressAnimation 2s ease-out;
+  }
+
+  @keyframes progressAnimation {
+    from {
+      width: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+    }
+
+    .cards-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .featured-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .card-value {
+      font-size: 32px;
+    }
+
+    .featured-value {
+      font-size: 42px;
+    }
+  }
+</style>
+
+<div class="container">
+  <div class="header">
+    <h1>Dashboard Overview</h1>
+    <p>Track your SkillSwap platform performance</p>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card blue">
+      <div class="card-header">
+        <div class="icon-wrapper blue">
+          <svg class="icon blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+          </svg>
+        </div>
+        <span class="change-badge">+12%</span>
+      </div>
+      <div class="card-value">247</div>
+      <div class="card-title">Skills</div>
+      <div class="card-progress">
+        <div class="card-progress-bar"></div>
+      </div>
+      <div class="decorative-circle"></div>
+    </div>
+
+    <div class="card green">
+      <div class="card-header">
+        <div class="icon-wrapper green">
+          <svg class="icon green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <span class="change-badge">+23%</span>
+      </div>
+      <div class="card-value">1,842</div>
+      <div class="card-title">Sessions</div>
+      <div class="card-progress">
+        <div class="card-progress-bar"></div>
+      </div>
+      <div class="decorative-circle"></div>
+    </div>
+
+    <div class="card purple">
+      <div class="card-header">
+        <div class="icon-wrapper purple">
+          <svg class="icon purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <span class="change-badge">+8%</span>
+      </div>
+      <div class="card-value">$45,290</div>
+      <div class="card-title">Revenue</div>
+      <div class="card-progress">
+        <div class="card-progress-bar"></div>
+      </div>
+      <div class="decorative-circle"></div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-header">
+        <div class="icon-wrapper orange">
+          <svg class="icon orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </div>
+        <span class="change-badge">+34%</span>
+      </div>
+      <div class="card-value">8,432</div>
+      <div class="card-title">Active Users</div>
+      <div class="card-progress">
+        <div class="card-progress-bar"></div>
+      </div>
+      <div class="decorative-circle"></div>
+    </div>
+  </div>
+
+  <div class="featured-grid">
+    <div class="featured-card">
+      <div class="featured-header">
+        <div class="featured-icon">
+          <svg width="32" height="32" fill="none" stroke="white" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+          </svg>
+        </div>
+        <span class="featured-badge">This Month</span>
+      </div>
+      <div class="featured-value">94.5%</div>
+      <div class="featured-title">Success Rate</div>
+      <div class="featured-subtitle">Highest performance this quarter</div>
+    </div>
+
+    <div class="achievement-card">
+      <div class="achievement-header">
+        <div class="achievement-icon">
+          <svg width="32" height="32" fill="none" stroke="white" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          </svg>
+        </div>
+        <div class="achievement-info">
+          <h3>Top Performer</h3>
+          <p>Platform Achievement</p>
+        </div>
+      </div>
+      <div class="progress-item">
+        <span class="progress-label">Completion Rate</span>
+        <span class="progress-value">98%</span>
+      </div>
+      <div class="progress-bar-wrapper">
+        <div class="progress-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "admin_base.html" %}
+{% load static %}
+
+{% block title %}Analytics - SkillSwap{% endblock %}
+
+{% block content %}
+<style>
+.analytics-container {
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.analytics-header {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.analytics-header h1 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.analytics-header p {
+  color: #6b7280;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-card:nth-child(1)::before {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-card:nth-child(2)::before {
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+}
+
+.stat-card:nth-child(3)::before {
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.stat-card:nth-child(4)::before {
+  background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.stat-card h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card:nth-child(1) h2 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card:nth-child(2) h2 {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card:nth-child(3) h2 {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card:nth-child(4) h2 {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card p {
+  color: #6b7280;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.stat-card:nth-child(1) .stat-icon {
+  filter: hue-rotate(0deg);
+}
+
+.stat-card:nth-child(2) .stat-icon {
+  filter: hue-rotate(320deg);
+}
+
+.stat-card:nth-child(3) .stat-icon {
+  filter: hue-rotate(180deg);
+}
+
+.stat-card:nth-child(4) .stat-icon {
+  filter: hue-rotate(40deg);
+}
+
+@media (max-width: 768px) {
+  .analytics-container {
+    padding: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .stat-card h2 {
+    font-size: 2.5rem;
+  }
+}
+</style>
+
+<div class="analytics-container">
+  <div class="analytics-header">
+    <h1>Analytics Overview</h1>
+    <p>Here's a quick look at platform performance.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <h2>{{ total_users }}</h2>
+      <p>Total Users</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <h2>{{ total_sessions }}</h2>
+      <p>Total Sessions</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💬</div>
+      <h2>{{ total_reviews }}</h2>
+      <p>Total Reviews</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⭐</div>
+      <h2>{{ average_rating }}/5</h2>
+      <p>Average Rating</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
